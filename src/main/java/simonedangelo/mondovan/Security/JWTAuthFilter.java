@@ -18,7 +18,7 @@ import simonedangelo.mondovan.User.UsersService;
 import java.io.IOException;
 
 @Component
-public class AuthFilter extends OncePerRequestFilter {
+public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTools jwtTools;
     @Autowired

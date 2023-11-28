@@ -14,7 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import simonedangelo.mondovan.Exceptions.ExceptionHandlerFilter;
-import simonedangelo.mondovan.Security.AuthFilter;
+import simonedangelo.mondovan.Security.JWTAuthFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 public class SecurityConfig {
     @Autowired
-    AuthFilter authFilter;
+    JWTAuthFilter JWTAuthFilter;
     @Autowired
     ExceptionHandlerFilter exceptionHandlerFilter;
     @Value("${cors.allowed-origins}")
@@ -38,8 +38,8 @@ public class SecurityConfig {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
         http.formLogin(login -> login.disable());
         http.cors(withDefaults());
-        http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(exceptionHandlerFilter, AuthFilter.class);
+        http.addFilterBefore(JWTAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JWTAuthFilter.class);
         http.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll());
         return http.build();
     }
