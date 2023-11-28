@@ -1,5 +1,6 @@
 package simonedangelo.mondovan.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public abstract class User implements UserDetails {
     @Column(name = "emails")
     private String email;
     @Column(name = "pws")
+    @JsonIgnore
     private String password;
     @Column(name = "names")
     private String name;

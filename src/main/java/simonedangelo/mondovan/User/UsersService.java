@@ -18,7 +18,6 @@ import simonedangelo.mondovan.Security.JWTTools;
 import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.Payload.UsersDTO;
-import simonedangelo.mondovan.User.Payload.UsersLoggedDTO;
 import simonedangelo.mondovan.User.Payload.UsersLoginDTO;
 
 import java.io.IOException;
@@ -53,13 +52,10 @@ public class UsersService {
         return usersRepository.findByEmail(email).orElseThrow(() -> new NotFoundEx("The searched user by email does not exist"));
     }
 
-    public UsersLoggedDTO autenticateUsers(UsersLoginDTO login) {
+    public String autenticateUsers(UsersLoginDTO login) {
         User u = usersRepository.findByEmail(login.email()).orElseThrow(() -> new NotFoundEx("email not found"));
         if (passwordEncoder.matches(login.password(), u.getPassword())) {
-            //QUI PER IL RUOLO VERIFICARE getAuthorities().
-            //PROBABILE LOOP DI BEANS QUI CREARE SERVICE PER AUTENTICATE
-            return new UsersLoggedDTO(jwtTools.createToken(u), u.getAuthorities());
-            //return jwtTools.createToken(u) + " " + u.getAuthorities();
+            return jwtTools.createToken(u);
         } else {
             throw new UnauthorizedEx("incorrected credentials");
         }
@@ -74,8 +70,9 @@ public class UsersService {
         List<User> users = usersRepository.findAll();
         for (User u : users) {
             if (u.getEmail().equals(userObj.email()) && u.getName().equals(userObj.name())
-                    && u.getSurname().equals(userObj.surname()) && u.getDayOfBirth().equals(userObj.dayOfBirth())) {
-                throw new BadRequestEx("This user already exist whit id: " + u.getId());
+                    && u.getSurname().equals(userObj.surname())
+                    && u.getDayOfBirth().equals(userObj.dayOfBirth())) {
+                throw new BadRequestEx("this user already exist");
             }
         }
         Customer c = new Customer();
