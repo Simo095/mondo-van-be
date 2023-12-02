@@ -1,4 +1,4 @@
-package simonedangelo.mondovan.Province;
+package simonedangelo.mondovan.Address.Province;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;

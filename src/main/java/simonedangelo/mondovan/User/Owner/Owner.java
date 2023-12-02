@@ -1,17 +1,16 @@
 package simonedangelo.mondovan.User.Owner;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import simonedangelo.mondovan.Address.AddressesOwner;
 import simonedangelo.mondovan.User.Enum.Role;
 import simonedangelo.mondovan.User.User;
+import simonedangelo.mondovan.Vehicle.Vehicle;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +24,12 @@ import java.util.List;
 public class Owner extends User {
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToOne
+    @JoinColumn(name = "id_addresses")
+    private AddressesOwner addressesOwner;
+    @OneToOne
+    @JoinColumn(name = "id_vehicles")
+    private Vehicle vehicle;
 
     public Owner() {
         this.role = Role.OWNER;
@@ -42,21 +47,21 @@ public class Owner extends User {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

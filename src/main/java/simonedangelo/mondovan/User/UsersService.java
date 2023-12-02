@@ -10,11 +10,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import simonedangelo.mondovan.Address.AddressesCustomer;
+import simonedangelo.mondovan.Address.AddressesOwner;
+import simonedangelo.mondovan.Address.AddressesRepository;
+import simonedangelo.mondovan.Address.Town.Town;
+import simonedangelo.mondovan.Address.Town.TownsRepository;
 import simonedangelo.mondovan.Beans.EmailsServices;
+import simonedangelo.mondovan.Beans.Security.JWTTools;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
 import simonedangelo.mondovan.Exceptions.UnauthorizedEx;
-import simonedangelo.mondovan.Security.JWTTools;
 import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.Payload.UsersDTO;
@@ -35,6 +40,10 @@ public class UsersService {
     private JWTTools jwtTools;
     @Autowired
     private EmailsServices emailService;
+    @Autowired
+    private TownsRepository townsRepository;
+    @Autowired
+    private AddressesRepository addressesRepository;
 
     public String getAvatar(MultipartFile file, long idUser) throws IOException {
         User u = usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
@@ -75,17 +84,30 @@ public class UsersService {
                 throw new BadRequestEx("this user already exist");
             }
         }
+        Town t = townsRepository.findById(userObj.idTown()).orElseThrow(() -> {
+            System.out.println(userObj.idTown());
+            return new NotFoundEx("server got problems whit towns");
+        });
+        AddressesCustomer a = new AddressesCustomer();
+        a.setHouseNumber(userObj.houseNumber());
+        a.setStreet(userObj.street());
+        a.setZipCode(userObj.zipCode());
+        a.setTown(t);
+        addressesRepository.save(a);
         Customer c = new Customer();
+        c.setAddressesCustomer(a);
         c.setName(userObj.name());
         c.setSurname(userObj.surname());
         c.setDayOfBirth(userObj.dayOfBirth());
         c.setAvatar("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
         c.setEmail(userObj.email());
         c.setPassword(passwordEncoder.encode(userObj.password()));
-        emailService.sendEmail(c.getEmail(),
-                "Registration with Van World was successful",
-                "Welcome " + c.getName() + " " + c.getSurname() +
-                        "\n your customer account has been created successfully");
+        if (c.getEmail().equals("simone.dangelo636@gmail.com")) {
+            emailService.sendEmail(c.getEmail(),
+                    "Registration with Van World was successful",
+                    "Welcome " + c.getName() + " " + c.getSurname() +
+                            "\n your customer account has been created successfully");
+        }
         return usersRepository.save(c);
     }
 
@@ -97,17 +119,30 @@ public class UsersService {
                 throw new BadRequestEx("This user already exist whit id: " + u.getId());
             }
         }
+        Town t = townsRepository.findById(userObj.idTown()).orElseThrow(() -> {
+            System.out.println(userObj.idTown());
+            return new NotFoundEx("server got problems whit towns");
+        });
+        AddressesOwner a = new AddressesOwner();
+        a.setHouseNumber(userObj.houseNumber());
+        a.setStreet(userObj.street());
+        a.setZipCode(userObj.zipCode());
+        a.setTown(t);
+        addressesRepository.save(a);
         Owner o = new Owner();
+        o.setAddressesOwner(a);
         o.setName(userObj.name());
         o.setSurname(userObj.surname());
         o.setDayOfBirth(userObj.dayOfBirth());
         o.setAvatar("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
         o.setEmail(userObj.email());
         o.setPassword(passwordEncoder.encode(userObj.password()));
-        emailService.sendEmail(o.getEmail(),
-                "Registration with Van World was successful",
-                "Welcome " + o.getName() + " " + o.getSurname() +
-                        "\n your owner account has been created successfully");
+        if (o.getEmail().equals("simone.dangelo636@gmail.com")) {
+            emailService.sendEmail(o.getEmail(),
+                    "Registration with Van World was successful",
+                    "Welcome " + o.getName() + " " + o.getSurname() +
+                            "\n your owner account has been created successfully");
+        }
         return usersRepository.save(o);
     }
 }

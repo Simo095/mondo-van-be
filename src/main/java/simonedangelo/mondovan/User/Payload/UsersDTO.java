@@ -6,5 +6,9 @@ public record UsersDTO(String name,
                        String surname,
                        String email,
                        String password,
-                       LocalDate dayOfBirth) {
+                       LocalDate dayOfBirth,
+                       long idTown,
+                       String street,
+                       int houseNumber,
+                       int zipCode) {
 }

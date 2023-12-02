@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import simonedangelo.mondovan.Beans.Security.JWTAuthFilter;
 import simonedangelo.mondovan.Exceptions.ExceptionHandlerFilter;
-import simonedangelo.mondovan.Security.JWTAuthFilter;
 
 import java.util.Arrays;
 import java.util.List;

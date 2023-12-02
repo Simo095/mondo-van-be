@@ -1,4 +1,4 @@
-package simonedangelo.mondovan.Security;
+package simonedangelo.mondovan.Beans.Security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

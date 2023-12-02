@@ -1,4 +1,4 @@
-package simonedangelo.mondovan.Security;
+package simonedangelo.mondovan.Beans.Security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

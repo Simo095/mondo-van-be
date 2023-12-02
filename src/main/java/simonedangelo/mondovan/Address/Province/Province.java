@@ -1,9 +1,13 @@
-package simonedangelo.mondovan.Province;
+package simonedangelo.mondovan.Address.Province;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import simonedangelo.mondovan.Address.Town.Town;
+
+import java.util.List;
 
 @Entity
 @Table(name = "provinces")
@@ -19,4 +23,8 @@ public class Province {
     @Column(name = "abb")
     private String abbreviation;
     private String region;
+    @OneToMany(mappedBy = "province")
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Town> cities;
 }

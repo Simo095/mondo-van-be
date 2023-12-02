@@ -1,15 +1,13 @@
 package simonedangelo.mondovan.User.Customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import simonedangelo.mondovan.Address.AddressesCustomer;
 import simonedangelo.mondovan.User.Enum.Role;
 import simonedangelo.mondovan.User.User;
 
@@ -25,6 +23,9 @@ import java.util.List;
 public class Customer extends User {
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToOne
+    @JoinColumn(name = "id_addresses")
+    private AddressesCustomer addressesCustomer;
 
     public Customer() {
         this.role = Role.CUSTOMER;
@@ -42,21 +43,21 @@ public class Customer extends User {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
