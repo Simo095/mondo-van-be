@@ -6,8 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MondoVanApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MondoVanApplication.class, args);
-	}
+    public static void main(String[] args) {
+
+        SpringApplication.run(MondoVanApplication.class, args);
+    }
 
 }

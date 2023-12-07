@@ -4,6 +4,7 @@ import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,12 @@ public class ExceptionsHandler {
         } else {
             return new ErrorsResponseDTO(ex.getMessage(), new Date(), new ArrayList<>());
         }
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponseDTO errNotSupported(HttpRequestMethodNotSupportedException ex) {
+        return new ErrorResponseDTO(ex.getMessage(), new Date());
     }
 
     //RICHIETE ERRATE

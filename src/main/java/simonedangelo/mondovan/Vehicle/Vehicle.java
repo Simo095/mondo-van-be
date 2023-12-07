@@ -1,10 +1,13 @@
 package simonedangelo.mondovan.Vehicle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import simonedangelo.mondovan.Reservation.Reservation;
+import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
 import simonedangelo.mondovan.User.Owner.Owner;
+import simonedangelo.mondovan.Vehicle.Arrangement.VehiclesArrangement;
 import simonedangelo.mondovan.Vehicle.Enum.License;
 import simonedangelo.mondovan.Vehicle.Enum.Supply;
 import simonedangelo.mondovan.Vehicle.Enum.Transmission;
@@ -18,7 +21,7 @@ import java.util.List;
 @Table(name = "vehicles")
 @Getter
 @Setter
-@ToString
+
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -34,27 +37,42 @@ public class Vehicle {
     private String plate;
     @Column(name = "registration_documents")
     private String registrationDocument;
+    @Column(name = "short_desc")
+    private String shortDescriptions;
     @Column(name = "avatars")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> avatar;
+
     @Column(name = "first_enrollments")
     private LocalDate firstEnrollment;
+
     @Enumerated(EnumType.STRING)
     private Type type;
     @Enumerated(EnumType.STRING)
     private License license;
-    @Column(name = "displacements")
+    @Column(name = "transmissions")
     @Enumerated(EnumType.STRING)
     private Transmission transmission;
     @Enumerated(EnumType.STRING)
     private Supply supply;
+
     private int displacement;
     private long kilometers;
     private double height;
     private double width;
     private double length;
-    @OneToOne(mappedBy = "vehicle")
+
+    @OneToOne
+    @JoinColumn(name = "id_owners")
+    @JsonIgnore
     private Owner owner;
+    @JsonIgnore
+    @OneToMany(mappedBy = "vehicle")
+    private List<ServiceStatus> servicesStatus;
+    @OneToOne(mappedBy = "vehicle")
+    private VehiclesArrangement vehiclesArrangement;
+    @OneToOne(mappedBy = "vehicle")
+    private Reservation reservation;
 
     public Vehicle() {
         this.avatar = new ArrayList<>();

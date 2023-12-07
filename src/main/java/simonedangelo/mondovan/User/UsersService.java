@@ -45,10 +45,18 @@ public class UsersService {
     @Autowired
     private AddressesRepository addressesRepository;
 
-    public String getAvatar(MultipartFile file, long idUser) throws IOException {
+    public String addAvatar(MultipartFile file, long idUser) throws IOException {
         User u = usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
         String s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
         u.setAvatar(s);
+        usersRepository.save(u);
+        return s;
+    }
+
+    public String addCover(MultipartFile file, long idUser) throws IOException {
+        User u = usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        String s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        u.setCover(s);
         usersRepository.save(u);
         return s;
     }
@@ -100,6 +108,7 @@ public class UsersService {
         c.setSurname(userObj.surname());
         c.setDayOfBirth(userObj.dayOfBirth());
         c.setAvatar("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
+        c.setCover("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
         c.setEmail(userObj.email());
         c.setPassword(passwordEncoder.encode(userObj.password()));
         if (c.getEmail().equals("simone.dangelo636@gmail.com")) {
@@ -135,6 +144,7 @@ public class UsersService {
         o.setSurname(userObj.surname());
         o.setDayOfBirth(userObj.dayOfBirth());
         o.setAvatar("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
+        o.setCover("https://ui-avatars.com/api/?name=" + userObj.name() + "+" + userObj.surname());
         o.setEmail(userObj.email());
         o.setPassword(passwordEncoder.encode(userObj.password()));
         if (o.getEmail().equals("simone.dangelo636@gmail.com")) {

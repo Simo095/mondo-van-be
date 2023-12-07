@@ -17,8 +17,11 @@ import simonedangelo.mondovan.User.Payload.UsersDTO;
 import simonedangelo.mondovan.User.Payload.UsersLoggedDTO;
 import simonedangelo.mondovan.User.Payload.UsersLoginDTO;
 import simonedangelo.mondovan.User.UsersService;
+import simonedangelo.mondovan.Vehicle.Payload.VehiclesServicesStatusDTO;
+import simonedangelo.mondovan.Vehicle.VehiclesService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,6 +33,8 @@ public class EnterController {
     private ProvincesService provincesService;
     @Autowired
     private TownsService townsService;
+    @Autowired
+    private VehiclesService vehiclesService;
 
     @PostMapping("/login")
     public UsersLoggedDTO login(@RequestBody UsersLoginDTO login) {
@@ -76,5 +81,53 @@ public class EnterController {
         List<Town> cityPerProvince = townsService.getByAbbreviation(abb);
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return new PageImpl<>(cityPerProvince, p, cityPerProvince.size());
+    }
+
+    @GetMapping("/date_prov_beds")
+    public Page<VehiclesServicesStatusDTO> vehicleAvailabilityAndRangeDateByProvinceAndBeds(@RequestParam(defaultValue = "0") int page,
+                                                                                            @RequestParam(defaultValue = "16") int size,
+                                                                                            @RequestParam(defaultValue = "id") String sort,
+                                                                                            @RequestParam() LocalDate start,
+                                                                                            @RequestParam() LocalDate end,
+                                                                                            @RequestParam() int beds,
+                                                                                            @RequestParam() String province) throws Exception {
+        List<VehiclesServicesStatusDTO> vehiclesList = vehiclesService.getByAvailabilityAndRangeDateByProvinceAndBeds(start, end, beds, province);
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+    }
+
+    @GetMapping("/date")
+    public Page<VehiclesServicesStatusDTO> vehicleAvailableByRangeDate(@RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "16") int size,
+                                                                       @RequestParam(defaultValue = "id") String sort,
+                                                                       @RequestParam() LocalDate start,
+                                                                       @RequestParam() LocalDate end) throws Exception {
+        List<VehiclesServicesStatusDTO> vehiclesList = vehiclesService.getByAvailabilityAndRangeDateOnly(start, end);
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+    }
+
+    @GetMapping("/date_beds")
+    public Page<VehiclesServicesStatusDTO> vehicleAvailableByRangeDateAndBeds(@RequestParam(defaultValue = "0") int page,
+                                                                              @RequestParam(defaultValue = "16") int size,
+                                                                              @RequestParam(defaultValue = "id") String sort,
+                                                                              @RequestParam() LocalDate start,
+                                                                              @RequestParam() LocalDate end,
+                                                                              @RequestParam() int beds) throws Exception {
+        List<VehiclesServicesStatusDTO> vehiclesList = vehiclesService.getByAvailabilityAndRangeDateAndBeds(start, end, beds);
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+    }
+
+    @GetMapping("/date_province")
+    public Page<VehiclesServicesStatusDTO> vehicleAvailableByRangeDateAndProvince(@RequestParam(defaultValue = "0") int page,
+                                                                                  @RequestParam(defaultValue = "16") int size,
+                                                                                  @RequestParam(defaultValue = "id") String sort,
+                                                                                  @RequestParam() LocalDate start,
+                                                                                  @RequestParam() LocalDate end,
+                                                                                  @RequestParam() String province) throws Exception {
+        List<VehiclesServicesStatusDTO> vehiclesList = vehiclesService.getByAvailabilityAndRangeDateAndProvince(start, end, province);
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(vehiclesList, p, vehiclesList.size());
     }
 }

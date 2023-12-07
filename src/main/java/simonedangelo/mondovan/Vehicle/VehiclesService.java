@@ -11,13 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
+import simonedangelo.mondovan.ServiceStatus.Enum.Status;
+import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
+import simonedangelo.mondovan.ServiceStatus.ServicesStatusRepository;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesDTO;
+import simonedangelo.mondovan.Vehicle.Payload.VehiclesServicesStatusDTO;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VehiclesService {
@@ -25,6 +32,8 @@ public class VehiclesService {
     private VehiclesRepository vehiclesRepository;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private ServicesStatusRepository servicesStatusRepository;
     @Autowired
     private Cloudinary cloudinary;
 
@@ -37,17 +46,14 @@ public class VehiclesService {
         } else {
             throw new BadRequestEx("the user logged isn't a OWNER");
         }
-
         Vehicle v = new Vehicle();
         v.setOwner(o);
         v.setName(obj.name());
         v.setModel(obj.model());
         v.setBrand(obj.brand());
-
         v.setDisplacement(obj.displacement());
         v.setKilometers(obj.kilometers());
         v.setFirstEnrollment(obj.firstEnrollment());
-
         v.setType(obj.type());
         v.setHeight(obj.height());
         v.setLength(obj.length());
@@ -55,13 +61,153 @@ public class VehiclesService {
         v.setLicense(obj.license());
         v.setPlate(obj.plate());
         v.setSupply(obj.supply());
-        return vehiclesRepository.save(v);
+        v.setTransmission(obj.transmission());
+        v.setShortDescriptions(obj.shortDescriptions());
+        vehiclesRepository.save(v);
+        for (int i = 0; i < 366; i++) {
+            ServiceStatus a = new ServiceStatus();
+            a.setDate(LocalDate.now().plusDays(i));
+            a.setState(Status.AVAILABLE);
+            a.setVehicle(v);
+            servicesStatusRepository.save(a);
+        }
+        return v;
     }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateByProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province) {
+        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).orElseThrow(
+                        () -> new NotFoundEx("there are no vans available in this range")
+                ).stream()
+                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
+                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
+        for (ServiceStatus l : filteredServiceStatuses) {
+            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
+                    l.getVehicle().getModel(),
+                    l.getVehicle().getBrand(),
+                    l.getVehicle().getAvatar(),
+                    l.getVehicle().getSupply(),
+                    l.getVehicle().getFirstEnrollment(),
+                    l.getVehicle().getLicense(),
+                    l.getVehicle().getType(),
+                    l.getVehicle().getTransmission(),
+                    l.getVehicle().getDisplacement(),
+                    l.getVehicle().getKilometers(),
+                    l.getVehicle().getHeight(),
+                    l.getVehicle().getWidth(),
+                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
+            vehiclesServicesStatusDTOList.add(v);
+        }
+        //vehiclesServicesStatusDTOList.forEach(System.out::println);
+        return vehiclesServicesStatusDTOList;
+    }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateOnly(LocalDate start, LocalDate end) {
+        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateOnly(start, end).orElseThrow(
+                        () -> new NotFoundEx("there are no vans available in this range")
+                ).stream()
+                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
+                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
+        for (ServiceStatus l : filteredServiceStatuses) {
+            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
+                    l.getVehicle().getModel(),
+                    l.getVehicle().getBrand(),
+                    l.getVehicle().getAvatar(),
+                    l.getVehicle().getSupply(),
+                    l.getVehicle().getFirstEnrollment(),
+                    l.getVehicle().getLicense(),
+                    l.getVehicle().getType(),
+                    l.getVehicle().getTransmission(),
+                    l.getVehicle().getDisplacement(),
+                    l.getVehicle().getKilometers(),
+                    l.getVehicle().getHeight(),
+                    l.getVehicle().getWidth(),
+                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
+            vehiclesServicesStatusDTOList.add(v);
+        }
+        //vehiclesServicesStatusDTOList.forEach(System.out::println);
+        return vehiclesServicesStatusDTOList;
+    }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndBeds(LocalDate start, LocalDate end, int beds) {
+        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateAndBeds(start, end, beds).orElseThrow(
+                        () -> new NotFoundEx("there are no vans available in this range")
+                ).stream()
+                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
+                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
+        for (ServiceStatus l : filteredServiceStatuses) {
+            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
+                    l.getVehicle().getModel(),
+                    l.getVehicle().getBrand(),
+                    l.getVehicle().getAvatar(),
+                    l.getVehicle().getSupply(),
+                    l.getVehicle().getFirstEnrollment(),
+                    l.getVehicle().getLicense(),
+                    l.getVehicle().getType(),
+                    l.getVehicle().getTransmission(),
+                    l.getVehicle().getDisplacement(),
+                    l.getVehicle().getKilometers(),
+                    l.getVehicle().getHeight(),
+                    l.getVehicle().getWidth(),
+                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
+            vehiclesServicesStatusDTOList.add(v);
+        }
+        //vehiclesServicesStatusDTOList.forEach(System.out::println);
+        return vehiclesServicesStatusDTOList;
+    }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndProvince(LocalDate start, LocalDate end, String province) {
+        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateAndProvince(start, end, province).orElseThrow(
+                        () -> new NotFoundEx("there are no vans available in this range")
+                ).stream()
+                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
+                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
+        for (ServiceStatus l : filteredServiceStatuses) {
+            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
+                    l.getVehicle().getModel(),
+                    l.getVehicle().getBrand(),
+                    l.getVehicle().getAvatar(),
+                    l.getVehicle().getSupply(),
+                    l.getVehicle().getFirstEnrollment(),
+                    l.getVehicle().getLicense(),
+                    l.getVehicle().getType(),
+                    l.getVehicle().getTransmission(),
+                    l.getVehicle().getDisplacement(),
+                    l.getVehicle().getKilometers(),
+                    l.getVehicle().getHeight(),
+                    l.getVehicle().getWidth(),
+                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
+            vehiclesServicesStatusDTOList.add(v);
+        }
+        //vehiclesServicesStatusDTOList.forEach(System.out::println);
+        return vehiclesServicesStatusDTOList;
+    }
+
 
     public Page<Vehicle> getPageVehicles(int page, int size, String sort) {
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return vehiclesRepository.findAll(p);
     }
+
+    public List<Vehicle> vehiclesByProvince(String province) {
+        return vehiclesRepository.findByAddressOwner(province).orElseThrow(
+                () -> new NotFoundEx("there are no vans available in this city")
+        );
+    }
+
+    public List<Vehicle> getByAvailability() {
+        return vehiclesRepository.findByAvailability().orElseThrow(
+                () -> new NotFoundEx("there are no vans available")
+        );
+    }
+
 
     public Vehicle getVehicleByIdOwner(long idOwner) throws NotFoundEx {
         return vehiclesRepository.findByIdOwner(idOwner).orElseThrow(
@@ -70,9 +216,10 @@ public class VehiclesService {
 
     public String addAvatarVehicles(MultipartFile file, long idOwner) throws IOException {
         Vehicle v = this.getVehicleByIdOwner(idOwner);
-        String s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        String s = "";
         List<String> lS = v.getAvatar();
         if (lS.size() <= 2) {
+            s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
             lS.add(s);
             v.setAvatar(lS);
             vehiclesRepository.save(v);
@@ -84,9 +231,14 @@ public class VehiclesService {
 
     public String addRegistrationDocumentVehicles(MultipartFile file, long idOwner) throws IOException {
         Vehicle v = this.getVehicleByIdOwner(idOwner);
-        String s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        v.setRegistrationDocument(s);
-        vehiclesRepository.save(v);
+        String s = "";
+        if (v.getRegistrationDocument().isEmpty()) {
+            s = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+            v.setRegistrationDocument(s);
+            vehiclesRepository.save(v);
+        } else {
+            throw new BadRequestEx("photo already uploaded");
+        }
         return s;
     }
 

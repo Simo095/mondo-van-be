@@ -20,5 +20,6 @@ public record VehiclesDTO(String name,
                           long kilometers,
                           double height,
                           double width,
-                          double length) {
+                          double length,
+                          String shortDescriptions) {
 }
