@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
 import simonedangelo.mondovan.ServiceStatus.Enum.Status;
+import simonedangelo.mondovan.ServiceStatus.Payload.ServicesStatusDTO;
 import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
 import simonedangelo.mondovan.ServiceStatus.ServicesStatusRepository;
 import simonedangelo.mondovan.User.Owner.Owner;
@@ -22,7 +23,6 @@ import simonedangelo.mondovan.Vehicle.Payload.VehiclesServicesStatusDTO;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,119 +75,96 @@ public class VehiclesService {
     }
 
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateByProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province) {
-        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).orElseThrow(
-                        () -> new NotFoundEx("there are no vans available in this range")
-                ).stream()
-                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
-                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
-                .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
-        for (ServiceStatus l : filteredServiceStatuses) {
-            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
-                    l.getVehicle().getModel(),
-                    l.getVehicle().getBrand(),
-                    l.getVehicle().getAvatar(),
-                    l.getVehicle().getSupply(),
-                    l.getVehicle().getFirstEnrollment(),
-                    l.getVehicle().getLicense(),
-                    l.getVehicle().getType(),
-                    l.getVehicle().getTransmission(),
-                    l.getVehicle().getDisplacement(),
-                    l.getVehicle().getKilometers(),
-                    l.getVehicle().getHeight(),
-                    l.getVehicle().getWidth(),
-                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
-            vehiclesServicesStatusDTOList.add(v);
+        if (vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
         }
-        //vehiclesServicesStatusDTOList.forEach(System.out::println);
-        return vehiclesServicesStatusDTOList;
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        if (collectionVehicleAvailable.isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
+        } else {
+            return collectionVehicleAvailable;
+        }
     }
 
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateOnly(LocalDate start, LocalDate end) {
-        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateOnly(start, end).orElseThrow(
-                        () -> new NotFoundEx("there are no vans available in this range")
-                ).stream()
-                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
-                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
-                .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
-        for (ServiceStatus l : filteredServiceStatuses) {
-            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
-                    l.getVehicle().getModel(),
-                    l.getVehicle().getBrand(),
-                    l.getVehicle().getAvatar(),
-                    l.getVehicle().getSupply(),
-                    l.getVehicle().getFirstEnrollment(),
-                    l.getVehicle().getLicense(),
-                    l.getVehicle().getType(),
-                    l.getVehicle().getTransmission(),
-                    l.getVehicle().getDisplacement(),
-                    l.getVehicle().getKilometers(),
-                    l.getVehicle().getHeight(),
-                    l.getVehicle().getWidth(),
-                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
-            vehiclesServicesStatusDTOList.add(v);
+        if (vehiclesRepository.findByRangeDateOnly(start, end).isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
         }
-        //vehiclesServicesStatusDTOList.forEach(System.out::println);
-        return vehiclesServicesStatusDTOList;
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateOnly(start, end)
+                .stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        if (collectionVehicleAvailable.isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
+        } else {
+            return collectionVehicleAvailable;
+        }
     }
 
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndBeds(LocalDate start, LocalDate end, int beds) {
-        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateAndBeds(start, end, beds).orElseThrow(
-                        () -> new NotFoundEx("there are no vans available in this range")
-                ).stream()
-                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
-                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
-                .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
-        for (ServiceStatus l : filteredServiceStatuses) {
-            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
-                    l.getVehicle().getModel(),
-                    l.getVehicle().getBrand(),
-                    l.getVehicle().getAvatar(),
-                    l.getVehicle().getSupply(),
-                    l.getVehicle().getFirstEnrollment(),
-                    l.getVehicle().getLicense(),
-                    l.getVehicle().getType(),
-                    l.getVehicle().getTransmission(),
-                    l.getVehicle().getDisplacement(),
-                    l.getVehicle().getKilometers(),
-                    l.getVehicle().getHeight(),
-                    l.getVehicle().getWidth(),
-                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
-            vehiclesServicesStatusDTOList.add(v);
+        if (vehiclesRepository.findByRangeDateAndBeds(start, end, beds).isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
         }
-        //vehiclesServicesStatusDTOList.forEach(System.out::println);
-        return vehiclesServicesStatusDTOList;
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndBeds(start, end, beds).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        if (collectionVehicleAvailable.isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
+        } else {
+            return collectionVehicleAvailable;
+        }
     }
 
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndProvince(LocalDate start, LocalDate end, String province) {
-        List<ServiceStatus> filteredServiceStatuses = vehiclesRepository.findByRangeDateAndProvince(start, end, province).orElseThrow(
-                        () -> new NotFoundEx("there are no vans available in this range")
-                ).stream()
-                .flatMap(vehicle -> vehicle.getServicesStatus().stream())
-                .filter(serviceStatus -> serviceStatus.getDate().equals(start) || serviceStatus.getDate().equals(end) || (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start)))
-                .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehiclesServicesStatusDTOList = new ArrayList<>();
-        for (ServiceStatus l : filteredServiceStatuses) {
-            VehiclesServicesStatusDTO v = new VehiclesServicesStatusDTO(l.getVehicle().getName(),
-                    l.getVehicle().getModel(),
-                    l.getVehicle().getBrand(),
-                    l.getVehicle().getAvatar(),
-                    l.getVehicle().getSupply(),
-                    l.getVehicle().getFirstEnrollment(),
-                    l.getVehicle().getLicense(),
-                    l.getVehicle().getType(),
-                    l.getVehicle().getTransmission(),
-                    l.getVehicle().getDisplacement(),
-                    l.getVehicle().getKilometers(),
-                    l.getVehicle().getHeight(),
-                    l.getVehicle().getWidth(),
-                    l.getVehicle().getLength(), l.getId(), l.getDate(), l.getState());
-            vehiclesServicesStatusDTOList.add(v);
+        if (vehiclesRepository.findByRangeDateAndProvince(start, end, province).isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
         }
-        //vehiclesServicesStatusDTOList.forEach(System.out::println);
-        return vehiclesServicesStatusDTOList;
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndProvince(start, end, province).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        if (collectionVehicleAvailable.isEmpty()) {
+            throw new NotFoundEx("No avaiability found");
+        } else {
+            return collectionVehicleAvailable;
+        }
     }
 
 

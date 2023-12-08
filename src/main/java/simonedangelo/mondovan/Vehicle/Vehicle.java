@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import simonedangelo.mondovan.Reservation.Reservation;
 import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
 import simonedangelo.mondovan.User.Owner.Owner;
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "vehicles")
 @Getter
 @Setter
-
+@ToString
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -69,8 +70,10 @@ public class Vehicle {
     @JsonIgnore
     @OneToMany(mappedBy = "vehicle")
     private List<ServiceStatus> servicesStatus;
+    @JsonIgnore
     @OneToOne(mappedBy = "vehicle")
     private VehiclesArrangement vehiclesArrangement;
+    @JsonIgnore
     @OneToOne(mappedBy = "vehicle")
     private Reservation reservation;
 

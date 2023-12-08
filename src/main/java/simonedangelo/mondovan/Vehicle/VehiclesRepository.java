@@ -18,15 +18,15 @@ public interface VehiclesRepository extends JpaRepository<Vehicle, Long> {
     Optional<List<Vehicle>> findByAvailability();
 
     @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.bads=:beds AND v.owner.addressesOwner.town.province.abbreviation=:province")
-    Optional<List<Vehicle>> findByRangeDateProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province);
+    List<Vehicle> findByRangeDateProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province);
 
     @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.bads=:beds")
-    Optional<List<Vehicle>> findByRangeDateAndBeds(LocalDate start, LocalDate end, int beds);
+    List<Vehicle> findByRangeDateAndBeds(LocalDate start, LocalDate end, int beds);
 
     @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.owner.addressesOwner.town.province.abbreviation=:province ")
-    Optional<List<Vehicle>> findByRangeDateAndProvince(LocalDate start, LocalDate end, String province);
+    List<Vehicle> findByRangeDateAndProvince(LocalDate start, LocalDate end, String province);
 
     @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end")
-    Optional<List<Vehicle>> findByRangeDateOnly(LocalDate start, LocalDate end);
+    List<Vehicle> findByRangeDateOnly(LocalDate start, LocalDate end);
 
 }

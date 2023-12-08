@@ -3,7 +3,6 @@ package simonedangelo.mondovan.ServiceStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import simonedangelo.mondovan.ServiceStatus.Enum.Status;
 import simonedangelo.mondovan.Vehicle.Vehicle;
 
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "availability")
 @Getter
 @Setter
-@ToString
+
 public class ServiceStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

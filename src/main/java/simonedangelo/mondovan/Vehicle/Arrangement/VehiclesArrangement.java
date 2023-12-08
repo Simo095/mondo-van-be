@@ -37,6 +37,7 @@ public class VehiclesArrangement {
     @Column(name = "set_up_by_me")
     private boolean doItMySelf;
     @JsonIgnore
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "id_vehicle")
     private Vehicle vehicle;
