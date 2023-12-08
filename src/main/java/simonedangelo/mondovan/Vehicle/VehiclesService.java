@@ -219,10 +219,19 @@ public class VehiclesService {
         return s;
     }
 
-    public void removeAvatarVehicles(long idOwner) {
+    public void removeAvatarVehicles(long idOwner, String urlImg) {
         Vehicle v = this.getVehicleByIdOwner(idOwner);
         if (v.getAvatar().isEmpty()) {
             throw new BadRequestEx("no photos present");
+        } else {
+            System.out.println(urlImg);
+            v.getAvatar().remove(urlImg);
+            vehiclesRepository.save(v);
         }
+    }
+
+    public void deleteVehicle(long idOwner) {
+        Vehicle v = this.getVehicleByIdOwner(idOwner);
+        vehiclesRepository.delete(v);
     }
 }

@@ -26,8 +26,13 @@ public class VehiclesController {
     @GetMapping("/my_vehicle")
     @PreAuthorize("hasAuthority('OWNER')")
     public Vehicle getVehicle(@AuthenticationPrincipal Owner owner) {
-
         return vehiclesService.getVehicleByIdOwner(owner.getId());
+    }
+
+    @DeleteMapping("/my_vehicle")
+    @PreAuthorize("hasAuthority('OWNER')")
+    public void deleteVehicle(@AuthenticationPrincipal Owner owner) {
+        vehiclesService.deleteVehicle(owner.getId());
     }
 
     @GetMapping("")
@@ -84,10 +89,16 @@ public class VehiclesController {
 
     @PatchMapping("/upload_img")
     @PreAuthorize("hasAuthority('OWNER')")
-    public String uploadAvatar(@RequestParam("img") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {
+    public String uploadImg(@RequestParam("img") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {
         System.out.println(registrationDocument.getSize());
         System.out.println(registrationDocument.getContentType());
         return vehiclesService.addAvatarVehicles(registrationDocument, loggedUser.getId());
+    }
+
+    @DeleteMapping("/remove_img")
+    @PreAuthorize("hasAuthority('OWNER')")
+    public void removeImg(@RequestParam("urlImg") String remove, @AuthenticationPrincipal User loggedUser) throws IOException {
+        vehiclesService.removeAvatarVehicles(loggedUser.getId(), remove);
     }
 
 }
