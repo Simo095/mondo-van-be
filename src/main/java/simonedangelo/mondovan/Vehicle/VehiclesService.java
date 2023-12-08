@@ -80,13 +80,13 @@ public class VehiclesService {
         }
         List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).stream()
                 .map(vehicle -> {
-                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
                             .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
                                     serviceStatus.getDate().equals(end) ||
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getAvatar(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -104,13 +104,13 @@ public class VehiclesService {
         List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateOnly(start, end)
                 .stream()
                 .map(vehicle -> {
-                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
                             .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
                                     serviceStatus.getDate().equals(end) ||
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getAvatar(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -127,13 +127,13 @@ public class VehiclesService {
         }
         List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndBeds(start, end, beds).stream()
                 .map(vehicle -> {
-                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
                             .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
                                     serviceStatus.getDate().equals(end) ||
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getAvatar(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -150,13 +150,13 @@ public class VehiclesService {
         }
         List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndProvince(start, end, province).stream()
                 .map(vehicle -> {
-                    List<ServicesStatusDTO> listFrontEnd = vehicle.getServicesStatus().stream()
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
                             .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
                                     serviceStatus.getDate().equals(end) ||
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getAvatar(), listFrontEnd);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getAvatar(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
