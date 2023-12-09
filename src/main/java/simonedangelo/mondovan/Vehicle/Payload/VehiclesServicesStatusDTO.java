@@ -9,6 +9,8 @@ public record VehiclesServicesStatusDTO(long id,
                                         String model,
                                         String brand,
                                         String desc,
+                                        int sits,
+                                        double pricePerDay,
                                         List<String> avatar,
                                         List<ServicesStatusDTO> listStatus) {
 }

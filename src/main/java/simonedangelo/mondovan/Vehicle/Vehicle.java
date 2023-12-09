@@ -34,10 +34,6 @@ public class Vehicle {
     private String model;
     @Column(name = "brands")
     private String brand;
-    @Column(name = "plates")
-    private String plate;
-    @Column(name = "registration_documents")
-    private String registrationDocument;
     @Column(name = "short_desc")
     private String shortDescriptions;
     @Column(name = "avatars")
@@ -58,10 +54,13 @@ public class Vehicle {
     private Supply supply;
 
     private int displacement;
+    private int sits;
     private long kilometers;
     private double height;
     private double width;
     private double length;
+    @Column(name = "prices")
+    private double pricePerDay;
 
     @OneToOne
     @JoinColumn(name = "id_owners")

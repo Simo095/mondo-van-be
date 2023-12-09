@@ -78,15 +78,7 @@ public class VehiclesController {
         } else throw new BadRequestEx(bindingResult.getAllErrors());
 
     }
-
-    @PatchMapping("/upload_document")
-    @PreAuthorize("hasAuthority('OWNER')")
-    public String uploadDocument(@RequestParam("registrationDocument") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {
-        System.out.println(registrationDocument.getSize());
-        System.out.println(registrationDocument.getContentType());
-        return vehiclesService.addRegistrationDocumentVehicles(registrationDocument, loggedUser.getId());
-    }
-
+    
     @PatchMapping("/upload_img")
     @PreAuthorize("hasAuthority('OWNER')")
     public String uploadImg(@RequestParam("img") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {

@@ -10,16 +10,18 @@ import java.time.LocalDate;
 public record VehiclesDTO(String name,
                           String model,
                           String brand,
-                          String plate,
+
                           Supply supply,
                           LocalDate firstEnrollment,
                           License license,
                           Type type,
                           Transmission transmission,
                           int displacement,
+                          int sits,
                           long kilometers,
                           double height,
                           double width,
                           double length,
-                          String shortDescriptions) {
+                          String shortDescriptions,
+                          double pricePerDay) {
 }
