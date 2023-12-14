@@ -36,6 +36,8 @@ public class Vehicle {
     private String brand;
     @Column(name = "short_desc")
     private String shortDescriptions;
+    @Column(name = "ads")
+    private String announcement;
     @Column(name = "avatars")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> avatar;
@@ -69,12 +71,12 @@ public class Vehicle {
     @JsonIgnore
     @OneToMany(mappedBy = "vehicle")
     private List<ServiceStatus> servicesStatus;
-    @JsonIgnore
+
     @OneToOne(mappedBy = "vehicle")
     private VehiclesArrangement vehiclesArrangement;
     @JsonIgnore
-    @OneToOne(mappedBy = "vehicle")
-    private Reservation reservation;
+    @OneToMany(mappedBy = "vehicle")
+    private List<Reservation> reservation;
 
     public Vehicle() {
         this.avatar = new ArrayList<>();

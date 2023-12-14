@@ -16,4 +16,5 @@ public class AddressesCustomer extends Address {
     @ToString.Exclude
     @JsonIgnore
     private List<Customer> customers;
+
 }

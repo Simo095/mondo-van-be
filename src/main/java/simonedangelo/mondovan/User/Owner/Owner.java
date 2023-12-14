@@ -1,5 +1,6 @@
 package simonedangelo.mondovan.User.Owner;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class Owner extends User {
     private Role role;
     @ManyToOne
     @JoinColumn(name = "id_addresses")
+    @JsonIgnore
     private AddressesOwner addressesOwner;
     @OneToOne(mappedBy = "owner")
     private Vehicle vehicle;

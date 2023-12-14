@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
-import simonedangelo.mondovan.Notification.Notification;
 import simonedangelo.mondovan.Notification.NotificationsRepository;
 import simonedangelo.mondovan.Reservation.Payload.ReservationsDTO;
 import simonedangelo.mondovan.ServiceStatus.Enum.Status;
@@ -59,26 +58,20 @@ public class ReservationsService {
             r.setStartDate(objReservation.start());
             r.setEndDate(objReservation.end());
             r.setState(simonedangelo.mondovan.Reservation.Enums.Status.TAKING_CHARGE);
-
+            r.setVehicle(v);
             filteredServiceStatus.forEach(serviceStatus -> {
                 serviceStatus.setState(Status.NOT_AVAILABLE);
                 servicesStatusRepository.save(serviceStatus);
             });
-            Notification n = new Notification();
-            n.setSender(u);
-            n.setReceiver(v.getOwner());
-            n.setObject("Hai una nuova prenotazione da " + u.getName());
-            n.setText(u.getName() + " ha prenotato il tuo van, se vuoi accettare la richiesta clicca qui: ");
-            n.setState(simonedangelo.mondovan.Notification.Enum.Status.OUTSTANDING);
-            notificationsRepository.save(n);
-            List<Notification> nL = v.getOwner().getNotifications();
-            nL.add(n);
-            v.getOwner().setNotifications(nL);
             return reservetionsRepository.save(r);
         } else {
             throw new BadRequestEx("there are dates already selected");
         }
 
 
+    }
+
+    public List<Reservation> getByVehicleFromOwner(long idUser) {
+        return this.getVehicleByIdOwner(idUser).getReservation();
     }
 }

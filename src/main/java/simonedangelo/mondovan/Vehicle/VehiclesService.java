@@ -18,6 +18,7 @@ import simonedangelo.mondovan.ServiceStatus.ServicesStatusRepository;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
+import simonedangelo.mondovan.Vehicle.Payload.AnnouncementDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesServicesStatusDTO;
 
@@ -89,10 +90,11 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
+        collectionVehicleAvailable.forEach(System.out::println);
         if (collectionVehicleAvailable.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
@@ -112,7 +114,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -135,7 +137,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -158,7 +160,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -217,6 +219,16 @@ public class VehiclesService {
             v.getAvatar().remove(urlImg);
             vehiclesRepository.save(v);
         }
+    }
+
+    public Vehicle getVehicleById(long idVehicle) {
+        return vehiclesRepository.findById(idVehicle).orElseThrow(() -> new NotFoundEx("vehicle not found"));
+    }
+
+    public Vehicle announcement(long idOwner, AnnouncementDTO dto) throws IOException {
+        Vehicle v = this.getVehicleByIdOwner(idOwner);
+        v.setAnnouncement(dto.announcement());
+        return vehiclesRepository.save(v);
     }
 
     public void deleteVehicle(long idOwner) {

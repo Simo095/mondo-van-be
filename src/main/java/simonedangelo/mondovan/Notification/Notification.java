@@ -17,13 +17,14 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_notifications", nullable = false)
     private long id;
-    private User sender;
-    private User receiver;
     private String object;
     private String text;
     private Status state;
     @ManyToOne
-    @JoinColumn(name = "id_users")
-    private User user;
+    @JoinColumn(name = "id_receiver")
+    private User receiver;
+    @ManyToOne
+    @JoinColumn(name = "id_sender")
+    private User sender;
 
 }

@@ -1,5 +1,6 @@
 package simonedangelo.mondovan.User.Customer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Customer extends User {
     private Role role;
     @ManyToOne
     @JoinColumn(name = "id_addresses")
+    @JsonIgnore
     private AddressesCustomer addressesCustomer;
 
     public Customer() {

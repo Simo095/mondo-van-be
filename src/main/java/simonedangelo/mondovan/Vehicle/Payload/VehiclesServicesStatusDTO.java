@@ -12,5 +12,6 @@ public record VehiclesServicesStatusDTO(long id,
                                         int sits,
                                         double pricePerDay,
                                         List<String> avatar,
+                                        String province,
                                         List<ServicesStatusDTO> listStatus) {
 }

@@ -28,6 +28,7 @@ public class VehiclesArrangement {
     private boolean kitchen;
     private boolean fridge;
     private boolean gas;
+
     @Column(name = "desc_kitchen")
     private String descriptionKitchen;
     @Column(name = "desc_bathroom")

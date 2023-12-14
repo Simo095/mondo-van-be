@@ -23,5 +23,4 @@ public abstract class Address {
     private String street;
     private int houseNumber;
     private int zipCode;
-
 }

@@ -20,6 +20,9 @@ import simonedangelo.mondovan.Beans.Security.JWTTools;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
 import simonedangelo.mondovan.Exceptions.UnauthorizedEx;
+import simonedangelo.mondovan.Notification.Enum.Status;
+import simonedangelo.mondovan.Notification.Notification;
+import simonedangelo.mondovan.Notification.NotificationsRepository;
 import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.Payload.UsersDTO;
@@ -44,6 +47,8 @@ public class UsersService {
     private TownsRepository townsRepository;
     @Autowired
     private AddressesRepository addressesRepository;
+    @Autowired
+    private NotificationsRepository notificationsRepository;
 
     public String addAvatar(MultipartFile file, long idUser) throws IOException {
         User u = usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
@@ -85,6 +90,7 @@ public class UsersService {
 
     public Customer customerRegister(UsersDTO userObj) throws IOException {
         List<User> users = usersRepository.findAll();
+        User admin = this.getUserByEmail("admin.admin@vanworld");
         for (User u : users) {
             if (u.getEmail().equals(userObj.email()) && u.getName().equals(userObj.name())
                     && u.getSurname().equals(userObj.surname())
@@ -117,11 +123,20 @@ public class UsersService {
                     "Welcome " + c.getName() + " " + c.getSurname() +
                             "\n your customer account has been created successfully");
         }
-        return usersRepository.save(c);
+        usersRepository.save(c);
+        Notification n = new Notification();
+        n.setObject("Benvenuto nel sito VanWorld");
+        n.setText("Complimenti, ora sei un membro di VanWorld e potrai noleggiare Van per le tue vacanze, dai un occhiata ai mezzi disponibili");
+        n.setSender(admin);
+        n.setState(Status.NOT_READ);
+        n.setReceiver(c);
+        notificationsRepository.save(n);
+        return c;
     }
 
     public Owner ownersRegister(UsersDTO userObj) throws IOException {
         List<User> users = usersRepository.findAll();
+        User admin = usersRepository.findByEmail("admin@admin.vanworld").orElseThrow(() -> new NotFoundEx("admin"));
         for (User u : users) {
             if (u.getEmail().equals(userObj.email()) && u.getName().equals(userObj.name())
                     && u.getSurname().equals(userObj.surname()) && u.getDayOfBirth().equals(userObj.dayOfBirth())) {
@@ -153,7 +168,15 @@ public class UsersService {
                     "Welcome " + o.getName() + " " + o.getSurname() +
                             "\n your owner account has been created successfully");
         }
-        return usersRepository.save(o);
+        usersRepository.save(o);
+        Notification n = new Notification();
+        n.setObject("Benvenuto nel sito VanWorld");
+        n.setText("Complimenti, ora sei un membro di VanWorld e potrai mettere in noleggio il tuo van, continua nella sezione il tuo veicolo");
+        n.setSender(admin);
+        n.setState(Status.NOT_READ);
+        n.setReceiver(o);
+        notificationsRepository.save(n);
+        return o;
     }
 }
 

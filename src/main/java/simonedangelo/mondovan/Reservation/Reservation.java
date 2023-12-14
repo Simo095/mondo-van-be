@@ -1,6 +1,5 @@
 package simonedangelo.mondovan.Reservation;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,13 +26,11 @@ public class Reservation {
     private LocalDate endDate;
     @Column(name = "status")
     private Status state;
-    @OneToOne
-    @JoinColumn(name = "id_availabilities")
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_vehicles")
     private Vehicle vehicle;
     @OneToOne
     @JoinColumn(name = "id_users")
-    @JsonIgnore
     private User user;
 
 }

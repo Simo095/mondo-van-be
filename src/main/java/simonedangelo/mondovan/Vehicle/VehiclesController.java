@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
+import simonedangelo.mondovan.Vehicle.Payload.AnnouncementDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesDTO;
 
 import java.io.IOException;
@@ -41,6 +42,12 @@ public class VehiclesController {
                                        @RequestParam(defaultValue = "16") int size,
                                        @RequestParam(defaultValue = "id") String sort) {
         return vehiclesService.getPageVehicles(page, size, sort);
+    }
+
+    @GetMapping("/result/{idVehicle}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public Vehicle getVehicle(@PathVariable long idVehicle) {
+        return vehiclesService.getVehicleById(idVehicle);
     }
 
     @GetMapping("/{province}")
@@ -78,13 +85,26 @@ public class VehiclesController {
         } else throw new BadRequestEx(bindingResult.getAllErrors());
 
     }
-    
+
     @PatchMapping("/upload_img")
     @PreAuthorize("hasAuthority('OWNER')")
     public String uploadImg(@RequestParam("img") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {
         System.out.println(registrationDocument.getSize());
         System.out.println(registrationDocument.getContentType());
         return vehiclesService.addAvatarVehicles(registrationDocument, loggedUser.getId());
+    }
+
+    @PatchMapping("/announcement")
+    @PreAuthorize("hasAuthority('OWNER')")
+    public Vehicle announcement(@AuthenticationPrincipal User loggedUser, @RequestBody @Validated AnnouncementDTO dto, BindingResult bindingResult) throws IOException {
+        if (!bindingResult.hasErrors()) {
+            try {
+                return vehiclesService.announcement(loggedUser.getId(), dto);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else throw new BadRequestEx(bindingResult.getAllErrors());
+
     }
 
     @DeleteMapping("/remove_img")

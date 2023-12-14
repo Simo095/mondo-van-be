@@ -46,12 +46,17 @@ public abstract class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     @JsonIgnore
     private Reservation reservation;
-    @OneToMany(mappedBy = "user")
-    private List<Notification> notifications;
+    @OneToMany(mappedBy = "sender")
+    @JsonIgnore
+    private List<Notification> notificationsSend;
+    @OneToMany(mappedBy = "receiver")
+    @JsonIgnore
+    private List<Notification> notificationsReceiver;
     @CreationTimestamp
     private Date createdAt;
 
     public User() {
-        this.notifications = new ArrayList<>();
+        this.notificationsSend = new ArrayList<>();
+        this.notificationsReceiver = new ArrayList<>();
     }
 }
