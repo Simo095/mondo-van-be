@@ -11,6 +11,8 @@ import simonedangelo.mondovan.Address.Province.ProvincesService;
 import simonedangelo.mondovan.Address.Town.Town;
 import simonedangelo.mondovan.Address.Town.TownsService;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
+import simonedangelo.mondovan.Post.Post;
+import simonedangelo.mondovan.Post.PostsService;
 import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.Payload.UsersDTO;
@@ -35,6 +37,8 @@ public class EnterController {
     private TownsService townsService;
     @Autowired
     private VehiclesService vehiclesService;
+    @Autowired
+    private PostsService postsService;
 
     @PostMapping("/login")
     public UsersLoggedDTO login(@RequestBody UsersLoginDTO login) {
@@ -129,5 +133,14 @@ public class EnterController {
         List<VehiclesServicesStatusDTO> vehiclesList = vehiclesService.getByAvailabilityAndRangeDateAndProvince(start, end, province);
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+    }
+
+    @GetMapping("/home")
+    public Page<Post> getPostControllerHome(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "5") int size,
+                                            @RequestParam(defaultValue = "id") String sort) {
+        List<Post> posts = postsService.getPostHome();
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(posts, p, posts.size());
     }
 }

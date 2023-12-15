@@ -48,4 +48,15 @@ public class ReservationsController {
         return new PageImpl<>(reservations, p, reservations.size());
     }
 
+    @GetMapping("/my_reservations")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public Page<Reservation> reservationByUser(@AuthenticationPrincipal User u,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "16") int size,
+                                               @RequestParam(defaultValue = "id") String sort) throws Exception {
+        List<Reservation> reservations = reservationsService.getByUser(u.getId());
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return new PageImpl<>(reservations, p, reservations.size());
+    }
+
 }

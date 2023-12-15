@@ -74,4 +74,8 @@ public class ReservationsService {
     public List<Reservation> getByVehicleFromOwner(long idUser) {
         return this.getVehicleByIdOwner(idUser).getReservation();
     }
+
+    public List<Reservation> getByUser(long idUser) {
+        return usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("user not found")).getReservation();
+    }
 }

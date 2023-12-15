@@ -29,7 +29,7 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "id_vehicles")
     private Vehicle vehicle;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_users")
     private User user;
 

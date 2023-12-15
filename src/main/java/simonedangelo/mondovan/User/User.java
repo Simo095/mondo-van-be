@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.userdetails.UserDetails;
 import simonedangelo.mondovan.Notification.Notification;
+import simonedangelo.mondovan.Post.Post;
 import simonedangelo.mondovan.Reservation.Reservation;
 
 import java.time.LocalDate;
@@ -43,9 +44,12 @@ public abstract class User implements UserDetails {
     private String cover;
     @Column(name = "days_of_birth")
     private LocalDate dayOfBirth;
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     @JsonIgnore
-    private Reservation reservation;
+    private List<Post> posts;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Reservation> reservation;
     @OneToMany(mappedBy = "sender")
     @JsonIgnore
     private List<Notification> notificationsSend;

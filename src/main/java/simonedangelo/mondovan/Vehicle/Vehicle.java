@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Length;
 import simonedangelo.mondovan.Reservation.Reservation;
 import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
 import simonedangelo.mondovan.User.Owner.Owner;
@@ -36,7 +37,7 @@ public class Vehicle {
     private String brand;
     @Column(name = "short_desc")
     private String shortDescriptions;
-    @Column(name = "ads")
+    @Column(name = "ads", length = Length.LOB_DEFAULT)
     private String announcement;
     @Column(name = "avatars")
     @ElementCollection(fetch = FetchType.EAGER)
