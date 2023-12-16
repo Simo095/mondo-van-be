@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -39,10 +38,29 @@ public class PostsController {
         return postsService.getAllPost(p);
     }
 
+    @GetMapping("/my_post")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
+    public Page<Post> getMyPostController(@AuthenticationPrincipal User user,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "16") int size,
+                                          @RequestParam(defaultValue = "id") String sort) {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return postsService.getMyPost(user, p);
+    }
 
-    @PostMapping("")
-    @PreAuthorize("hasAuthority('OWNER')")
-    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/my_friends")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
+    public Page<Post> getMyFriendsPost(@AuthenticationPrincipal User user,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "16") int size,
+                                       @RequestParam(defaultValue = "id") String sort) {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return postsService.getAllMyFriendsPost(user.getFriends(), p);
+    }
+
+
+    @PostMapping()
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
     public Post savePost(@AuthenticationPrincipal User user,
                          @RequestBody @Validated PostsDTO obj, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
@@ -56,12 +74,17 @@ public class PostsController {
     }
 
     @PatchMapping("/upload_img/{idPost}")
-    @PreAuthorize("hasAuthority('OWNER')")
-    public String uploadImg(@RequestParam("img") MultipartFile img,
-                            @AuthenticationPrincipal User loggedUser,
-                            @PathVariable long idPost) throws IOException {
-        System.out.println(img.getSize());
-        System.out.println(img.getContentType());
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public String uploadImg(@PathVariable long idPost,
+                            @RequestParam("img") MultipartFile img,
+                            @AuthenticationPrincipal User loggedUser) throws IOException {
         return postsService.addImg(img, loggedUser.getId(), idPost);
+    }
+
+    @DeleteMapping("/{idPost}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public void deletePost(@PathVariable long idPost,
+                           @AuthenticationPrincipal User loggedUser) throws IOException {
+        postsService.deletePost(idPost, loggedUser);
     }
 }

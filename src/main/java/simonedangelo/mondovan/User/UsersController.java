@@ -28,6 +28,12 @@ public class UsersController {
         return usersService.addAvatar(registrationDocument, loggedUser.getId());
     }
 
+    @PatchMapping("/{idFriends}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public User addFriends(@AuthenticationPrincipal User loggedUser, @PathVariable long idFriends) throws IOException {
+        return usersService.addFriend(idFriends, loggedUser);
+    }
+
     @PatchMapping("/upload_cover")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
     public String uploadCover(@RequestParam("cover") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {

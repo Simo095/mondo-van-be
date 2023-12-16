@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
+import simonedangelo.mondovan.Post.Enum.Category;
 import simonedangelo.mondovan.Post.Payload.PostsDTO;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
@@ -30,6 +31,7 @@ public class PostsService {
         p.setAuthor(u);
         p.setText(obj.text());
         p.setTitle(obj.title());
+        p.setCategory(obj.category());
         return postsRepository.save(p);
     }
 
@@ -49,8 +51,31 @@ public class PostsService {
         return postsRepository.findById(idPost).orElseThrow(() -> new NotFoundEx("Post not found"));
     }
 
+    public void deletePost(long idPost, User user) {
+        Post p = postsRepository.findById(idPost).orElseThrow(() -> new NotFoundEx("Post not found"));
+        if (p.getAuthor().getId() == user.getId()) {
+            postsRepository.delete(p);
+        }
+    }
+
     public Page<Post> getAllPost(Pageable p) {
         return postsRepository.findAll(p);
+    }
+
+    public Page<Post> getMyPost(User author, Pageable p) {
+        return postsRepository.findByAuthor(author, p);
+    }
+
+    public Page<Post> getAllMyFriendsPost(List<User> user, Pageable p) {
+        return postsRepository.findByFriend(user, p);
+    }
+
+    public Page<Post> getPostByCategory(Category category, Pageable p) {
+        return postsRepository.findByCategory(category, p);
+    }
+
+    public Page<Post> getMyPostByCategory(Category category, User author, Pageable p) {
+        return postsRepository.findByCategoryAndAuthor(category, author, p);
     }
 
     public List<Post> getPostHome() {

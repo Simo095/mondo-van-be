@@ -112,8 +112,8 @@ public class PersonRunner implements CommandLineRunner {
                 descAcc.add("Il sistema di riscaldamento è un accessorio indispensabile per chi viaggia in inverno.");
 
                 listaMarche.add("Mercedes-Benz");
-                listaMarche.add("Volkswagen ");
-                listaMarche.add("Fiat ");
+                listaMarche.add("Volkswagen");
+                listaMarche.add("Fiat");
 
                 a.setHouseNumber(r.nextInt(1, 100));
                 a.setStreet(f.address().streetAddress(false));
@@ -377,15 +377,12 @@ public class PersonRunner implements CommandLineRunner {
                 v.setSupply(Supply.DIESEL);
                 v.setTransmission(Transmission.MANUAL);
                 v.setShortDescriptions(r.nextInt() % 2 == 0 ? "Vacanze in liberta con " + v.getName() : "Comodita garantita, ovunque e comunuque!");
+                List<String> lS = List.of("https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg", "https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg", "https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg");
+                v.setAvatar(lS);
                 vehiclesRepository.save(v);
+
+
                 for (int j = 0; j < 366; j++) {
-                    List<String> lS = v.getAvatar();
-                    if (lS.size() <= 2) {
-                        String s = "https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg";
-                        lS.add(s);
-                        v.setAvatar(lS);
-                        vehiclesRepository.save(v);
-                    }
                     ServiceStatus s = new ServiceStatus();
                     s.setDate(LocalDate.now().plusDays(j));
                     s.setState(Status.AVAILABLE);

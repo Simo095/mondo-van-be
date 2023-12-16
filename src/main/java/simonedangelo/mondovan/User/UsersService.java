@@ -66,6 +66,29 @@ public class UsersService {
         return s;
     }
 
+    public User addFriend(long idFriend, User u) {
+        User f = usersRepository.findById(idFriend).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        List<User> lU = u.getFriends();
+        lU.add(f);
+        u.setFriends(lU);
+        return usersRepository.save(u);
+    }
+
+    public User removeFriend(long idFriend, User u) {
+        User f = usersRepository.findById(idFriend).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        List<User> lU = u.getFriends();
+        lU.remove(f);
+        u.setFriends(lU);
+        return usersRepository.save(u);
+    }
+
+
+    public List<User> getMyFriend(User u) {
+        User f = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        return f.getFriends();
+    }
+
+
     public User getUserById(long idUser) throws NotFoundEx {
         return usersRepository.findById(idUser).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
     }
@@ -90,11 +113,9 @@ public class UsersService {
 
     public Customer customerRegister(UsersDTO userObj) throws IOException {
         List<User> users = usersRepository.findAll();
-        User admin = this.getUserByEmail("admin.admin@vanworld");
+        User admin = this.getUserByEmail("admin.admin@vanworld.com");
         for (User u : users) {
-            if (u.getEmail().equals(userObj.email()) && u.getName().equals(userObj.name())
-                    && u.getSurname().equals(userObj.surname())
-                    && u.getDayOfBirth().equals(userObj.dayOfBirth())) {
+            if (u.getEmail().equals(userObj.email())) {
                 throw new BadRequestEx("this user already exist");
             }
         }
@@ -136,10 +157,9 @@ public class UsersService {
 
     public Owner ownersRegister(UsersDTO userObj) throws IOException {
         List<User> users = usersRepository.findAll();
-        User admin = usersRepository.findByEmail("admin@admin.vanworld").orElseThrow(() -> new NotFoundEx("admin"));
+        User admin = this.getUserByEmail("admin.admin@vanworld.com");
         for (User u : users) {
-            if (u.getEmail().equals(userObj.email()) && u.getName().equals(userObj.name())
-                    && u.getSurname().equals(userObj.surname()) && u.getDayOfBirth().equals(userObj.dayOfBirth())) {
+            if (u.getEmail().equals(userObj.email())) {
                 throw new BadRequestEx("This user already exist whit id: " + u.getId());
             }
         }

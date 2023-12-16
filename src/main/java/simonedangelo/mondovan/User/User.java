@@ -1,7 +1,6 @@
 package simonedangelo.mondovan.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@JsonIgnoreProperties({"password"})
 public abstract class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -44,23 +42,28 @@ public abstract class User implements UserDetails {
     private String cover;
     @Column(name = "days_of_birth")
     private LocalDate dayOfBirth;
-    @OneToMany(mappedBy = "author")
-    @JsonIgnore
-    private List<Post> posts;
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Reservation> reservation;
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private List<Notification> notificationsSend;
-    @OneToMany(mappedBy = "receiver")
-    @JsonIgnore
-    private List<Notification> notificationsReceiver;
+    @Column(name = "friends")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<User> friends;
     @CreationTimestamp
     private Date createdAt;
+    @JsonIgnore
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservation;
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender")
+    private List<Notification> notificationsSend;
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver")
+    private List<Notification> notificationsReceiver;
+
 
     public User() {
         this.notificationsSend = new ArrayList<>();
         this.notificationsReceiver = new ArrayList<>();
+        this.friends = new ArrayList<>();
     }
 }

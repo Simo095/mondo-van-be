@@ -3,6 +3,8 @@ package simonedangelo.mondovan.Exceptions;
 import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,8 +31,14 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDTO errNotSupported(HttpRequestMethodNotSupportedException ex) {
+        return new ErrorResponseDTO(ex.getMessage(), new Date());
+    }
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDTO errNotSupported(HttpMessageNotWritableException ex) {
         return new ErrorResponseDTO(ex.getMessage(), new Date());
     }
 
@@ -50,6 +58,12 @@ public class ExceptionsHandler {
     @ExceptionHandler(NotFoundEx.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDTO errNotFound(NotFoundEx ex) {
+        return new ErrorResponseDTO(ex.getMessage(), new Date());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDTO errAccessDenied(AccessDeniedException ex) {
         return new ErrorResponseDTO(ex.getMessage(), new Date());
     }
 

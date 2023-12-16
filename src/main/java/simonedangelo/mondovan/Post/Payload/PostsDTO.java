@@ -1,4 +1,6 @@
 package simonedangelo.mondovan.Post.Payload;
 
-public record PostsDTO(String title, String text) {
+import simonedangelo.mondovan.Post.Enum.Category;
+
+public record PostsDTO(String title, String text, Category category) {
 }
