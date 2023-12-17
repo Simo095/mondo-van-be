@@ -21,6 +21,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "users")
+
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User implements UserDetails {
     @Id
@@ -49,6 +50,7 @@ public abstract class User implements UserDetails {
     private Date createdAt;
     @JsonIgnore
     @OneToMany(mappedBy = "author")
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Post> posts;
     @JsonIgnore
     @OneToMany(mappedBy = "user")

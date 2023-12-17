@@ -38,7 +38,7 @@ public class VehiclesArrangementService {
         return vehiclesArrangementRepository.findAll(p);
     }
 
-    public VehiclesArrangement saveVehiclesArrangement(long idOwner, VehiclesArrangementDTO objArrangement) throws IOException {
+    public Vehicle saveVehiclesArrangement(long idOwner, VehiclesArrangementDTO objArrangement) throws IOException {
         Vehicle v = this.getVehicleByIdOwner(idOwner);
         VehiclesArrangement vA = new VehiclesArrangement();
         vA.setBads(objArrangement.bads());
@@ -54,7 +54,8 @@ public class VehiclesArrangementService {
         vA.setDoItMySelf(objArrangement.doItMySelf());
         vA.setAccessoriesDescription(objArrangement.accessoriesDescription());
         vA.setVehicle(v);
-        return vehiclesArrangementRepository.save(vA);
+        vehiclesArrangementRepository.save(vA);
+        return v;
     }
 
     public VehiclesArrangement updateVehiclesArrangement(long idOwner, VehiclesArrangementDTO objArrangement) throws IOException {

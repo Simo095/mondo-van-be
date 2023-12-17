@@ -34,6 +34,12 @@ public class UsersController {
         return usersService.addFriend(idFriends, loggedUser);
     }
 
+    @DeleteMapping("/{idFriends}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public User deleteFriends(@AuthenticationPrincipal User loggedUser, @PathVariable long idFriends) throws IOException {
+        return usersService.removeFriend(idFriends, loggedUser);
+    }
+
     @PatchMapping("/upload_cover")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
     public String uploadCover(@RequestParam("cover") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {

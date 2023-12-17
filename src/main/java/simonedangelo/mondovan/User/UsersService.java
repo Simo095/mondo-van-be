@@ -76,10 +76,12 @@ public class UsersService {
 
     public User removeFriend(long idFriend, User u) {
         User f = usersRepository.findById(idFriend).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
-        List<User> lU = u.getFriends();
+        User user = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        List<User> lU = user.getFriends();
         lU.remove(f);
         u.setFriends(lU);
-        return usersRepository.save(u);
+        usersRepository.save(user);
+        return user;
     }
 
 

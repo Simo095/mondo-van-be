@@ -32,7 +32,7 @@ public class PostsController {
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
     public Page<Post> getAllPostController(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "16") int size,
+                                           @RequestParam(defaultValue = "30") int size,
                                            @RequestParam(defaultValue = "id") String sort) {
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return postsService.getAllPost(p);

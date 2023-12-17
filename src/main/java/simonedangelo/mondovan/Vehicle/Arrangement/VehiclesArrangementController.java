@@ -11,6 +11,7 @@ import simonedangelo.mondovan.Exceptions.BadRequestEx;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesArrangementDTO;
+import simonedangelo.mondovan.Vehicle.Vehicle;
 
 import java.io.IOException;
 
@@ -36,8 +37,8 @@ public class VehiclesArrangementController {
 
     @PostMapping()
     @PreAuthorize("hasAuthority('OWNER')")
-    public VehiclesArrangement saveVehiclesArrangement(@AuthenticationPrincipal User user,
-                                                       @RequestBody @Validated VehiclesArrangementDTO objV, BindingResult bindingResult) {
+    public Vehicle saveVehiclesArrangement(@AuthenticationPrincipal User user,
+                                           @RequestBody @Validated VehiclesArrangementDTO objV, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             try {
                 return vehiclesArrangementService.saveVehiclesArrangement(user.getId(), objV);

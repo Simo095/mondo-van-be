@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import simonedangelo.mondovan.Notification.Enum.Status;
 import simonedangelo.mondovan.User.User;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "notifications")
@@ -26,5 +29,7 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "id_sender")
     private User sender;
+    @CreationTimestamp
+    private Date createAd;
 
 }

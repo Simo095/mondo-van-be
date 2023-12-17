@@ -40,7 +40,7 @@ public class Vehicle {
     @Column(name = "ads", length = Length.LOB_DEFAULT)
     private String announcement;
     @Column(name = "avatars")
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> avatar;
 
     @Column(name = "first_enrollments")
