@@ -41,6 +41,29 @@ public class ReservationsService {
                 () -> new BadRequestEx("this user has no vehicles assigned"));
     }
 
+    public Reservation getReservation(long idReservation) {
+        return reservetionsRepository.findById(idReservation).orElseThrow(() -> new NotFoundEx("resevation not found"));
+    }
+
+    public Reservation confirmReservation(long idReservation) {
+        Reservation r = this.getReservation(idReservation);
+        r.setState(simonedangelo.mondovan.Reservation.Enums.Status.PENDING_PAYMENT);
+        return reservetionsRepository.save(r);
+    }
+
+    public Reservation deleteReservation(long idReservation) {
+        Reservation r = this.getReservation(idReservation);
+        r.setState(simonedangelo.mondovan.Reservation.Enums.Status.NOT_CONFIRMED);
+        List<ServiceStatus> filteredServiceStatus = r.getVehicle().getServicesStatus().stream().filter(serviceStatus -> serviceStatus.getDate().equals(r.getStartDate())
+                || serviceStatus.getDate().equals(r.getEndDate())
+                || (serviceStatus.getDate().isBefore(r.getEndDate()) && serviceStatus.getDate().isAfter(r.getStartDate()))).collect(Collectors.toList());
+        filteredServiceStatus.forEach(serviceStatus -> {
+            serviceStatus.setState(Status.AVAILABLE);
+            servicesStatusRepository.save(serviceStatus);
+        });
+        return reservetionsRepository.save(r);
+    }
+
     public Reservation saveReservation(long idUser, ReservationsDTO objReservation, long idVehicle) throws IOException {
         User u = this.getUserById(idUser);
         Vehicle v = vehiclesRepository.findById(idVehicle).orElseThrow(() -> new NotFoundEx("van not found"));
@@ -51,7 +74,6 @@ public class ReservationsService {
                 .collect(Collectors.toList());
         List<ServiceStatus> notAvailableList = filteredServiceStatus.stream().filter(serviceStatus ->
                 serviceStatus.getState().equals(Status.NOT_AVAILABLE)).toList();
-        notAvailableList.forEach(System.out::println);
         if (notAvailableList.isEmpty()) {
             Reservation r = new Reservation();
             r.setUser(u);

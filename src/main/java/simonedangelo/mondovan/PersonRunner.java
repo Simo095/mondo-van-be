@@ -13,6 +13,7 @@ import simonedangelo.mondovan.Address.Town.TownsRepository;
 import simonedangelo.mondovan.Exceptions.NotFoundEx;
 import simonedangelo.mondovan.Notification.Notification;
 import simonedangelo.mondovan.Notification.NotificationsRepository;
+import simonedangelo.mondovan.Post.Enum.Category;
 import simonedangelo.mondovan.Post.Post;
 import simonedangelo.mondovan.Post.PostsRepository;
 import simonedangelo.mondovan.ServiceStatus.Enum.Status;
@@ -69,6 +70,8 @@ public class PersonRunner implements CommandLineRunner {
             Admin admin = new Admin();
             admin.setName("Admin");
             admin.setSurname("VanWorld");
+            admin.setAvatar("http://res.cloudinary.com/dhwybes2b/image/upload/v1702910304/ogbuqa5xrdoq1lyt4aan.png");
+            admin.setCover("http://res.cloudinary.com/dhwybes2b/image/upload/v1702910304/ogbuqa5xrdoq1lyt4aan.png");
             admin.setEmail("admin.admin@vanworld.com");
             admin.setPassword(passwordEncoder.encode("1234"));
             usersRepository.save(admin);
@@ -144,6 +147,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Al confine del Mediterraneo");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570498/euwbwmiro8prqdegcvgj.jpg");
                         p.setText("Bellissimo viaggio fino alla fine dell'Europa con il Van preso a noleggio su VanWorld");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -153,6 +157,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Un orso inaspettato nel nostro bnb!");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702562146/mezphz8ur9fcc5asicau.jpg");
                         p.setText("Durante il nostro recente soggiorno in un bnb con van, abbiamo avuto un incontro ravvicinato con un ospite un po' particolare: un orso impagliato");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }
@@ -162,6 +167,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Posto fantastico!!");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570812/bovtmg1k1qmerawujxs3.jpg");
                         p.setText("Durante il nostro recente viaggio in spagna abbiamo trovato questo posto stupendo. Un campeggio riva costa dove soggiornare con il van preso con VanWorld");
+                        p.setCategory(Category.TRAVELERS_STORY);
                         postsRepository.save(p);
                         break;
                     }
@@ -171,6 +177,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Montagne alberate");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570670/iev7abphlpg4incbyeek.jpg");
                         p.setText("Con il Van preso in noleggio abbiamo passato un meraviglio week end immersi nel verde delle montagne!");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -182,6 +189,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("Fu costruito all’inizio dell’XI secolo da Adalberto Pallavicino e fu conquistato dagli Aldighieri di Parma nel 1315, che miravano a controllare le saline e sfruttare l’acqua delle Terme di Salsomaggiore per la produzione di sale. Gli Aldighieri vantano una presunta discendenza dal celebre poeta Dante Alighieri.\n" +
                                 "\n" +
                                 "La leggenda narra che proprio il sommo poeta soggiornò in questo maestoso maniero durante gli anni dell’esilio, lasciando un’impronta indelebile nella storia del castello. Il castello si presta a tutta quelle attività come degustazioni di vini o cene romantiche ed è una tappa ideale per chi, dopo una lunga giornata di cure termale vuole rifugiarsi in un luogo dal panorama mozzafiato.");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }
@@ -193,6 +201,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("Sei uno a cui piace camminare da solo o in compagnia? Lentamente, dall’Adriatico allo Ionio puoi affrontare un facile percorso a tappe. Si chiama Rotta dei Due Mari (qui il sito ufficiale), si trova in Puglia e attraversa grotte, trulli e masserie. Nel mezzo i borghi, nessuno uguale all’altro e ognuno particolare a modo suo. Calza gli scarponi, indossa lo zaino: e accendi il motore del camper. Questa è molto di più di una semplice vacanza. Il sentiero è delineato dai muretti a secco che cingono ulivi secolari e qualche trullo che funge da ricovero per gli attrezzi agricoli del contadino. Una segnaletica rossa e blu in vernice ecologica indica il percorso di 136 chilometri che si articola in sei tappe. Dall’Adriatico allo Ionio si cammina lentamente lungo la ciclovia dell’acquedotto pugliese attraversando il Parco Naturale delle Pianelle, la più grande riserva naturale dell’area fino a raggiungere il mare di Taranto.\n" +
                                 "\n" +
                                 "A piedi da Polignano a Mare a Taranto, antica colonia della Magna Grecia anche chiamata “città dei due mari” per la sua posizione, stretta tra Mar Grande e Mar Piccolo. Nel mezzo i borghi.");
+                        p.setCategory(Category.TRAVELERS_STORY);
                         postsRepository.save(p);
                         break;
                     }
@@ -204,6 +213,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("È stata inaugurata nell’aprile del 2021 e da subito ha richiamato a sé numerosi amanti della bicicletta: dai ciclisti della domenica agli sportivi in allenamento, dai viaggiatori sui pedali di lunga percorrenza alle famiglie con bambini in gita. La Ciclovia del Sole collega in circa quaranta chilometri Mirandola alla frazione Osteria Nuova di Sala Bolognese attraversando gli orizzonti piatti della pianura emiliana e ripercorrendo una parte del tracciato dell’ex ferrovia Bologna-Verona. " +
                                 "Il percorso, che si sviluppa in buona parte su pista ciclabile e a volte su stradine a basso traffico, è ben segnalato e ha quale simbolo guida un vivace sole color giallo. Ai lati della pista si alternano distese di campi coltivati, zone di interesse naturalistico, antichi borghi e piccole cittadine tutti contrassegnati da ritmi lenti e spiccate tradizioni locali. " +
                                 "Da Osteria Nuova di Sala Bolognese con altri dieci chilometri di pedalata su un percorso di collegamento provvisorio consentono di arrivare trionfalmente alla Città dei Portici, Bologna. Di seguito vi proponiamo la nostra esperienza lungo la Ciclovia del Sole effettuata con la modalità camper più bici.");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -213,6 +223,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Langhe in camper tra i vigneti da Barolo ad Alba");
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2022/11/20221026-Piemonte-Langhe-Barolo-Veduta-panoramica-verso-il-borgo.jpg");
                         p.setText("L'autunno e la primavera sono i periodi migliori per girare i borghi delle Langhe in camper. Da Barolo ad Alba un itinerario fra vigne, musei e cantine. Le mezze stagioni sono il periodo migliore per gironzolare in camper sulle colline delle Langhe tra vigne, borghi e piccoli musei. Con il foliage autunnale o le belle giornate di sole primaverili è piacevole osservare la strada che sale leggermente per raggiungere i paesi raggomitolati sui pendii. Durante il nostro itinerario da Barolo ad Alba sostiamo nel confortevole agricampeggio La Rosa del Borgo a La Morra.");
+                        p.setCategory(Category.TRAVELERS_STORY);
                         postsRepository.save(p);
                         break;
                     }
@@ -222,6 +233,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Cosa vedere a Venezia a Natale, sogno d'acqua e pietra");
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2023/05/2023-05-09-Venezia_Lo-squero-di-San-Trovaso_28.jpg");
                         p.setText("Luci sulla laguna: in occasione delle festività di fine anno il fascino di canali e campielli si accende di un’atmosfera unica. Scopriamo, o riscopriamo, una città senza pari: vivete l’autentico spirito di Venezia approfittando delle tante proposte culturali che offre e... non scordate il vostro camper! E’ il sogno di milioni di persone, da secoli. È la meta agognata di schiere di pittori, scrittori, fotografi e di appassionati viaggiatori provenienti da ogni parte del mondo, “un sogno di acqua e di pietra” come chiosò Wolfgang Goethe. Per chi scrive risulta addirittura imbarazzante scegliere le parole giuste per evitare di rivestire Venezia di retorica e raccontare questa bellezza impareggiabile e sfacciata senza cadere nell’ovvio.");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -232,6 +244,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2023/09/20230627-Trentino-Alto-Adige-San-Candido-e-Sesto-Val-Campo-di-Dentro-Escursionisti-in-mountain-bike-Mauro-Toccaceli.jpg");
                         p.setText("I centri storici apprezzati dalla nobiltà austroungarica, le opportunità per l’outdoor, i paesaggi dolomitici tutelati dall’Unesco. La vallata che si estende all’estremo nordest altoatesino invita a una vacanza en plein air davvero per tutti. È una bella giornata d’estate e l’isola pedonale di San Candido è animata da un via vai di vacanzieri in cerca di tranquillità e aria buona. Non a caso: l’Alta Val Pusteria è una delle mete più gettonate del territorio altoatesino. Un tempo questa era terra austriaca, e lo dimostra l’uso del tedesco come lingua principale. Già nella seconda metà dell’Ottocento, con la costruzione della ferrovia che univa Fortezza a Maribor, nell’attuale Slovenia, la zona divenne luogo di villeggiatura frequentato dall’élite austro-ungarica. " +
                                 "La bellezza delle sue località, insieme alla natura del Parco Naturale Tre Cime, ne fanno una meta ideale per gli amanti dell’outdoor. D’inverno è un paradiso per lo sci di fondo con oltre 200 chilometri di piste, nella stagione estiva è il regno delle passeggiate a piedi e in bicicletta su percorsi d’ogni tipo e difficoltà: il tutto al cospetto delle Dolomiti.");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }
@@ -267,6 +280,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Al confine del Mediterraneo");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570498/euwbwmiro8prqdegcvgj.jpg");
                         p.setText("Bellissimo viaggio fino alla fine dell'Europa con il Van preso a noleggio su VanWorld");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }
@@ -276,6 +290,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Un orso inaspettato nel nostro bnb!");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702562146/mezphz8ur9fcc5asicau.jpg");
                         p.setText("Durante il nostro recente soggiorno in un bnb con van, abbiamo avuto un incontro ravvicinato con un ospite un po' particolare: un orso impagliato");
+                        p.setCategory(Category.TRAVELERS_STORY);
                         postsRepository.save(p);
                         break;
                     }
@@ -285,6 +300,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Posto fantastico!!");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570812/bovtmg1k1qmerawujxs3.jpg");
                         p.setText("Durante il nostro recente viaggio in spagna abbiamo trovato questo posto stupendo. Un campeggio riva costa dove soggiornare con il van preso con VanWorld");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -294,6 +310,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Montagne alberate");
                         p.setImg("http://res.cloudinary.com/dhwybes2b/image/upload/v1702570670/iev7abphlpg4incbyeek.jpg");
                         p.setText("Con il Van preso in noleggio abbiamo passato un meraviglio week end immersi nel verde delle montagne!");
+                        p.setCategory(Category.TRAVELERS_STORY);
                         postsRepository.save(p);
                         break;
                     }
@@ -305,6 +322,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("Fu costruito all’inizio dell’XI secolo da Adalberto Pallavicino e fu conquistato dagli Aldighieri di Parma nel 1315, che miravano a controllare le saline e sfruttare l’acqua delle Terme di Salsomaggiore per la produzione di sale. Gli Aldighieri vantano una presunta discendenza dal celebre poeta Dante Alighieri.\n" +
                                 "\n" +
                                 "La leggenda narra che proprio il sommo poeta soggiornò in questo maestoso maniero durante gli anni dell’esilio, lasciando un’impronta indelebile nella storia del castello. Il castello si presta a tutta quelle attività come degustazioni di vini o cene romantiche ed è una tappa ideale per chi, dopo una lunga giornata di cure termale vuole rifugiarsi in un luogo dal panorama mozzafiato.");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -316,6 +334,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("Sei uno a cui piace camminare da solo o in compagnia? Lentamente, dall’Adriatico allo Ionio puoi affrontare un facile percorso a tappe. Si chiama Rotta dei Due Mari (qui il sito ufficiale), si trova in Puglia e attraversa grotte, trulli e masserie. Nel mezzo i borghi, nessuno uguale all’altro e ognuno particolare a modo suo. Calza gli scarponi, indossa lo zaino: e accendi il motore del camper. Questa è molto di più di una semplice vacanza. Il sentiero è delineato dai muretti a secco che cingono ulivi secolari e qualche trullo che funge da ricovero per gli attrezzi agricoli del contadino. Una segnaletica rossa e blu in vernice ecologica indica il percorso di 136 chilometri che si articola in sei tappe. Dall’Adriatico allo Ionio si cammina lentamente lungo la ciclovia dell’acquedotto pugliese attraversando il Parco Naturale delle Pianelle, la più grande riserva naturale dell’area fino a raggiungere il mare di Taranto.\n" +
                                 "\n" +
                                 "A piedi da Polignano a Mare a Taranto, antica colonia della Magna Grecia anche chiamata “città dei due mari” per la sua posizione, stretta tra Mar Grande e Mar Piccolo. Nel mezzo i borghi.");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }
@@ -327,6 +346,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setText("È stata inaugurata nell’aprile del 2021 e da subito ha richiamato a sé numerosi amanti della bicicletta: dai ciclisti della domenica agli sportivi in allenamento, dai viaggiatori sui pedali di lunga percorrenza alle famiglie con bambini in gita. La Ciclovia del Sole collega in circa quaranta chilometri Mirandola alla frazione Osteria Nuova di Sala Bolognese attraversando gli orizzonti piatti della pianura emiliana e ripercorrendo una parte del tracciato dell’ex ferrovia Bologna-Verona. " +
                                 "Il percorso, che si sviluppa in buona parte su pista ciclabile e a volte su stradine a basso traffico, è ben segnalato e ha quale simbolo guida un vivace sole color giallo. Ai lati della pista si alternano distese di campi coltivati, zone di interesse naturalistico, antichi borghi e piccole cittadine tutti contrassegnati da ritmi lenti e spiccate tradizioni locali. " +
                                 "Da Osteria Nuova di Sala Bolognese con altri dieci chilometri di pedalata su un percorso di collegamento provvisorio consentono di arrivare trionfalmente alla Città dei Portici, Bologna. Di seguito vi proponiamo la nostra esperienza lungo la Ciclovia del Sole effettuata con la modalità camper più bici.");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -336,6 +356,8 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Langhe in camper tra i vigneti da Barolo ad Alba");
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2022/11/20221026-Piemonte-Langhe-Barolo-Veduta-panoramica-verso-il-borgo.jpg");
                         p.setText("L'autunno e la primavera sono i periodi migliori per girare i borghi delle Langhe in camper. Da Barolo ad Alba un itinerario fra vigne, musei e cantine. Le mezze stagioni sono il periodo migliore per gironzolare in camper sulle colline delle Langhe tra vigne, borghi e piccoli musei. Con il foliage autunnale o le belle giornate di sole primaverili è piacevole osservare la strada che sale leggermente per raggiungere i paesi raggomitolati sui pendii. Durante il nostro itinerario da Barolo ad Alba sostiamo nel confortevole agricampeggio La Rosa del Borgo a La Morra.");
+                        p.setCategory(Category.TRAVELERS_STORY);
+
                         postsRepository.save(p);
                         break;
                     }
@@ -345,6 +367,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setTitle("Cosa vedere a Venezia a Natale, sogno d'acqua e pietra");
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2023/05/2023-05-09-Venezia_Lo-squero-di-San-Trovaso_28.jpg");
                         p.setText("Luci sulla laguna: in occasione delle festività di fine anno il fascino di canali e campielli si accende di un’atmosfera unica. Scopriamo, o riscopriamo, una città senza pari: vivete l’autentico spirito di Venezia approfittando delle tante proposte culturali che offre e... non scordate il vostro camper! E’ il sogno di milioni di persone, da secoli. È la meta agognata di schiere di pittori, scrittori, fotografi e di appassionati viaggiatori provenienti da ogni parte del mondo, “un sogno di acqua e di pietra” come chiosò Wolfgang Goethe. Per chi scrive risulta addirittura imbarazzante scegliere le parole giuste per evitare di rivestire Venezia di retorica e raccontare questa bellezza impareggiabile e sfacciata senza cadere nell’ovvio.");
+                        p.setCategory(Category.MY_VAN);
                         postsRepository.save(p);
                         break;
                     }
@@ -355,6 +378,7 @@ public class PersonRunner implements CommandLineRunner {
                         p.setImg("https://www.pleinair.it/wp-content/uploads/2023/09/20230627-Trentino-Alto-Adige-San-Candido-e-Sesto-Val-Campo-di-Dentro-Escursionisti-in-mountain-bike-Mauro-Toccaceli.jpg");
                         p.setText("I centri storici apprezzati dalla nobiltà austroungarica, le opportunità per l’outdoor, i paesaggi dolomitici tutelati dall’Unesco. La vallata che si estende all’estremo nordest altoatesino invita a una vacanza en plein air davvero per tutti. È una bella giornata d’estate e l’isola pedonale di San Candido è animata da un via vai di vacanzieri in cerca di tranquillità e aria buona. Non a caso: l’Alta Val Pusteria è una delle mete più gettonate del territorio altoatesino. Un tempo questa era terra austriaca, e lo dimostra l’uso del tedesco come lingua principale. Già nella seconda metà dell’Ottocento, con la costruzione della ferrovia che univa Fortezza a Maribor, nell’attuale Slovenia, la zona divenne luogo di villeggiatura frequentato dall’élite austro-ungarica. " +
                                 "La bellezza delle sue località, insieme alla natura del Parco Naturale Tre Cime, ne fanno una meta ideale per gli amanti dell’outdoor. D’inverno è un paradiso per lo sci di fondo con oltre 200 chilometri di piste, nella stagione estiva è il regno delle passeggiate a piedi e in bicicletta su percorsi d’ogni tipo e difficoltà: il tutto al cospetto delle Dolomiti.");
+                        p.setCategory(Category.RECOMMENDED_TRIPS);
                         postsRepository.save(p);
                         break;
                     }

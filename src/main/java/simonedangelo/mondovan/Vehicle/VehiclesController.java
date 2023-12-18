@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
+import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.Vehicle.Payload.AnnouncementDTO;
@@ -36,7 +37,7 @@ public class VehiclesController {
         vehiclesService.deleteVehicle(owner.getId());
     }
 
-    @GetMapping("")
+    @GetMapping()
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
     public Page<Vehicle> getAllVehicle(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "16") int size,
@@ -69,6 +70,16 @@ public class VehiclesController {
         List<Vehicle> vehiclesList = vehiclesService.getByAvailability();
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+    }
+
+    @GetMapping("/customer_page")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public Page<Vehicle> vehicleCustomerPageByRegion(@AuthenticationPrincipal Customer user,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "16") int size,
+                                                     @RequestParam(defaultValue = "id") String sort) throws Exception {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return vehiclesService.getByRegion(user, p);
     }
 
 

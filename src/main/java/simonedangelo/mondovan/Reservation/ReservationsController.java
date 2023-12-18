@@ -37,8 +37,16 @@ public class ReservationsController {
 
     }
 
+    @DeleteMapping("/{idReservation}")
+    @PreAuthorize("hasAuthority('OWNER')")
+
+    public Reservation deleteReservationVehicles(@PathVariable long idReservation,
+                                                 @AuthenticationPrincipal User user) {
+        return reservationsService.deleteReservation(idReservation);
+    }
+
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    @PreAuthorize("hasAuthority('OWNER')")
     public Page<Reservation> vehicleAvailable(@AuthenticationPrincipal User u,
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "16") int size,
@@ -49,7 +57,7 @@ public class ReservationsController {
     }
 
     @GetMapping("/my_reservations")
-    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public Page<Reservation> reservationByUser(@AuthenticationPrincipal User u,
                                                @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "16") int size,

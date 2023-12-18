@@ -43,9 +43,8 @@ public abstract class User implements UserDetails {
     private String cover;
     @Column(name = "days_of_birth")
     private LocalDate dayOfBirth;
-    @Column(name = "friends")
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<User> friends;
+
+    private List<Long> friends;
     @CreationTimestamp
     private Date createdAt;
     @JsonIgnore

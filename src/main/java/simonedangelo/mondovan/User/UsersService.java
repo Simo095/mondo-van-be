@@ -66,29 +66,32 @@ public class UsersService {
         return s;
     }
 
+
     public User addFriend(long idFriend, User u) {
         User f = usersRepository.findById(idFriend).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
-        List<User> lU = u.getFriends();
-        lU.add(f);
+        User user = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
+        List<Long> lU = user.getFriends();
+        lU.add(f.getId());
         u.setFriends(lU);
+
         return usersRepository.save(u);
     }
 
     public User removeFriend(long idFriend, User u) {
         User f = usersRepository.findById(idFriend).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
         User user = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
-        List<User> lU = user.getFriends();
-        lU.remove(f);
+        List<Long> lU = user.getFriends();
+        lU.remove(f.getId());
         u.setFriends(lU);
         usersRepository.save(user);
         return user;
     }
 
 
-    public List<User> getMyFriend(User u) {
+/*    public List<User> getMyFriend(User u) {
         User f = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
         return f.getFriends();
-    }
+    }*/
 
 
     public User getUserById(long idUser) throws NotFoundEx {

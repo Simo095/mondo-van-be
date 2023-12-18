@@ -15,6 +15,7 @@ import simonedangelo.mondovan.ServiceStatus.Enum.Status;
 import simonedangelo.mondovan.ServiceStatus.Payload.ServicesStatusDTO;
 import simonedangelo.mondovan.ServiceStatus.ServiceStatus;
 import simonedangelo.mondovan.ServiceStatus.ServicesStatusRepository;
+import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
@@ -175,6 +176,10 @@ public class VehiclesService {
     public Page<Vehicle> getPageVehicles(int page, int size, String sort) {
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return vehiclesRepository.findAll(p);
+    }
+
+    public Page<Vehicle> getByRegion(Customer user, Pageable p) {
+        return vehiclesRepository.findByRegionOwner(user.getAddressesCustomer().getTown().getProvince().getRegion(), p);
     }
 
     public List<Vehicle> vehiclesByProvince(String province) {
