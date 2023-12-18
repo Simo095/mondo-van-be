@@ -29,6 +29,7 @@ import simonedangelo.mondovan.User.Payload.UsersDTO;
 import simonedangelo.mondovan.User.Payload.UsersLoginDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,10 +89,15 @@ public class UsersService {
     }
 
 
-/*    public List<User> getMyFriend(User u) {
-        User f = usersRepository.findById(u.getId()).orElseThrow(() -> new NotFoundEx("The searched user does not exist"));
-        return f.getFriends();
-    }*/
+    public List<User> getMyFriend(User u) {
+        
+        List<User> friendList = new ArrayList<>();
+        for (int i = 0; i < u.getFriends().size(); i++) {
+            User user = this.getUserById(u.getFriends().get(i));
+            friendList.add(user);
+        }
+        return friendList;
+    }
 
 
     public User getUserById(long idUser) throws NotFoundEx {

@@ -47,7 +47,7 @@ public class PostsController {
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
         return postsService.getMyPost(user, p);
     }
-/*
+
 
     @GetMapping("/my_friends")
     @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
@@ -59,7 +59,6 @@ public class PostsController {
         return postsService.getAllMyFriendsPost(user.getFriends(), p);
     }
 
-*/
 
     @PostMapping()
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")

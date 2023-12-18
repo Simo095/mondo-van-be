@@ -21,6 +21,6 @@ public interface PostsRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByCategoryAndAuthor(Category category, User author, Pageable p);
 
-    @Query("SELECT p FROM Post p WHERE p.author IN(:user)")
-    Page<Post> findByFriend(List<User> user, Pageable p);
+    @Query("SELECT p FROM Post p WHERE p.author.id IN(:friend)")
+    Page<Post> findByFriend(List<Long> friend, Pageable p);
 }
