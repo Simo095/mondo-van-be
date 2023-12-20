@@ -95,11 +95,35 @@ public class VehiclesService {
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
-        collectionVehicleAvailable.forEach(System.out::println);
         if (collectionVehicleAvailable.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
             return collectionVehicleAvailable;
+        }
+    }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndMoney(LocalDate start, LocalDate end, int money) {
+        if (vehiclesRepository.findByRangeDateOnly(start, end).isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        }
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateOnly(start, end)
+                .stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        if (vehicleFilter.isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        } else {
+            return vehicleFilter;
         }
     }
 
@@ -126,6 +150,30 @@ public class VehiclesService {
         }
     }
 
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndProvinceAndPrice(LocalDate start, LocalDate end, String province, int money) {
+        if (vehiclesRepository.findByRangeDateAndProvince(start, end, province).isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        }
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndProvince(start, end, province).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        if (vehicleFilter.isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        } else {
+            return vehicleFilter;
+        }
+    }
+
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndBeds(LocalDate start, LocalDate end, int beds) {
         if (vehiclesRepository.findByRangeDateAndBeds(start, end, beds).isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
@@ -149,6 +197,30 @@ public class VehiclesService {
         }
     }
 
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateAndBedsAndPrice(LocalDate start, LocalDate end, int beds, int money) {
+        if (vehiclesRepository.findByRangeDateAndBeds(start, end, beds).isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        }
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateAndBeds(start, end, beds).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        if (vehicleFilter.isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        } else {
+            return vehicleFilter;
+        }
+    }
+
     public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateByProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province) {
         if (vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
@@ -169,6 +241,30 @@ public class VehiclesService {
             throw new NotFoundEx("Avaiability not found");
         } else {
             return collectionVehicleAvailable;
+        }
+    }
+
+    public List<VehiclesServicesStatusDTO> getByAvailabilityAndRangeDateByProvinceAndBedsAndPrice(LocalDate start, LocalDate end, int beds, String province, int money) {
+        if (vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        }
+        List<VehiclesServicesStatusDTO> collectionVehicleAvailable = vehiclesRepository.findByRangeDateProvinceAndBeds(start, end, beds, province).stream()
+                .map(vehicle -> {
+                    List<ServicesStatusDTO> listServicesDTO = vehicle.getServicesStatus().stream()
+                            .filter(serviceStatus -> (serviceStatus.getDate().equals(start) ||
+                                    serviceStatus.getDate().equals(end) ||
+                                    (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
+                            .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
+                            .collect(Collectors.toList());
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                })
+                .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
+                .collect(Collectors.toList());
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        if (vehicleFilter.isEmpty()) {
+            throw new NotFoundEx("Avaiability not found");
+        } else {
+            return vehicleFilter;
         }
     }
 

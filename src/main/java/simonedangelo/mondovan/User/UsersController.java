@@ -20,6 +20,12 @@ public class UsersController {
         return usersService.getUserById(user.getId());
     }
 
+    @GetMapping("/{idUser}")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
+    public User getUser(@AuthenticationPrincipal User user, @PathVariable long idUser) {
+        return usersService.getUserById(idUser);
+    }
+
     @PatchMapping("/upload_avatar")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
     public String uploadAvatar(@RequestParam("avatar") MultipartFile registrationDocument, @AuthenticationPrincipal User loggedUser) throws IOException {

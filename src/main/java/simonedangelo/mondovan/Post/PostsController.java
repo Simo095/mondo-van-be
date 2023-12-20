@@ -38,6 +38,16 @@ public class PostsController {
         return postsService.getAllPost(p);
     }
 
+    @GetMapping("/user/{idAuthor}")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
+    public Page<Post> getPostUserController(@AuthenticationPrincipal User user,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "16") int size,
+                                            @RequestParam(defaultValue = "id") String sort, @PathVariable long idAuthor) {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return postsService.getUserPost(idAuthor, p);
+    }
+
     @GetMapping("/my_post")
     @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
     public Page<Post> getMyPostController(@AuthenticationPrincipal User user,

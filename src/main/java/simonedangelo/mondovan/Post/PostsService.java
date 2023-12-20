@@ -66,6 +66,10 @@ public class PostsService {
         return postsRepository.findByAuthor(author, p);
     }
 
+    public Page<Post> getUserPost(long idAuthor, Pageable p) {
+        return postsRepository.findByIdAuthor(idAuthor, p);
+    }
+
     public Page<Post> getAllMyFriendsPost(List<Long> user, Pageable p) {
         return postsRepository.findByFriend(user, p);
     }

@@ -26,13 +26,6 @@ public class NotificationsController {
         return notificationService.notificationsByUser(u);
     }
 
-    @GetMapping("/{idNotification}")
-    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER','ADMIN')")
-    public Notification getNotification(@AuthenticationPrincipal User u,
-                                        @PathVariable long idNotification) {
-        return notificationService.getNotificationsById(u, idNotification);
-    }
-
     @PostMapping("/for_reservation")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER','ADMIN')")
     public Notification sendNotification(@AuthenticationPrincipal User u,
@@ -45,6 +38,15 @@ public class NotificationsController {
             }
         } else throw new BadRequestEx(bindingResult.getAllErrors());
     }
+
+    /*---------INUTILIZZATI*/
+    @GetMapping("/{idNotification}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER','ADMIN')")
+    public Notification getNotification(@AuthenticationPrincipal User u,
+                                        @PathVariable long idNotification) {
+        return notificationService.getNotificationsById(u, idNotification);
+    }
+
 
     @PostMapping("/response")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER','ADMIN')")
@@ -59,6 +61,7 @@ public class NotificationsController {
         } else throw new BadRequestEx(bindingResult.getAllErrors());
     }
 
+    /*---------INUTILIZZATI*/
     @PatchMapping("/{idNotification}")
     @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER','ADMIN')")
     public Notification modifyStatusNotification(@AuthenticationPrincipal User u,
