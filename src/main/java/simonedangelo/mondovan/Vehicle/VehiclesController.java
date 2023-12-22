@@ -31,6 +31,12 @@ public class VehiclesController {
         return vehiclesService.getVehicleByIdOwner(owner.getId());
     }
 
+    @GetMapping("/user/{idUser}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public Vehicle getVehicleById(@AuthenticationPrincipal User user, @PathVariable long idUser) {
+        return vehiclesService.getVehicleByIdOwner(idUser);
+    }
+
     @DeleteMapping("/my_vehicle")
     @PreAuthorize("hasAuthority('OWNER')")
     public void deleteVehicle(@AuthenticationPrincipal Owner owner) {
