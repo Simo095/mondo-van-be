@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.userdetails.UserDetails;
+import simonedangelo.mondovan.Comment.Comment;
 import simonedangelo.mondovan.Notification.Notification;
 import simonedangelo.mondovan.Post.Post;
 import simonedangelo.mondovan.Reservation.Reservation;
@@ -60,6 +61,9 @@ public abstract class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "receiver")
     private List<Notification> notificationsReceiver;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Comment> comments;
 
 
     public User() {

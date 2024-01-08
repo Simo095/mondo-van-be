@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import simonedangelo.mondovan.Exceptions.BadRequestEx;
+import simonedangelo.mondovan.Post.Enum.Category;
 import simonedangelo.mondovan.Post.Payload.PostsDTO;
 import simonedangelo.mondovan.User.User;
 
@@ -32,10 +33,20 @@ public class PostsController {
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
     public Page<Post> getAllPostController(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "100") int size,
-                                           @RequestParam(defaultValue = "id") String sort) {
-        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+                                           @RequestParam(defaultValue = "10") int size,
+                                           @RequestParam(defaultValue = "createdAt") String sort) {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort).reverse().ascending());
         return postsService.getAllPost(p);
+    }
+
+    @GetMapping("/category/{category}")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','OWNER')")
+    public Page<Post> getPostByCategory(@RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size,
+                                        @RequestParam(defaultValue = "id") String sort,
+                                        @PathVariable Category category) {
+        Pageable p = PageRequest.of(page, size, Sort.by(sort));
+        return postsService.getPostByCategory(category, p);
     }
 
     @GetMapping("/user/{idAuthor}")
@@ -90,6 +101,20 @@ public class PostsController {
                             @RequestParam("img") MultipartFile img,
                             @AuthenticationPrincipal User loggedUser) throws IOException {
         return postsService.addImg(img, loggedUser.getId(), idPost);
+    }
+
+    @PatchMapping("/modify_post/{idPost}")
+    @PreAuthorize("hasAnyAuthority('OWNER','CUSTOMER')")
+    public Post modifyPosts(@PathVariable long idPost,
+                            @RequestBody @Validated PostsDTO body, BindingResult bindingResult) throws IOException {
+        if (!bindingResult.hasErrors()) {
+            try {
+                return postsService.modifyPost(body, idPost);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else throw new BadRequestEx(bindingResult.getAllErrors());
+
     }
 
     @DeleteMapping("/{idPost}")

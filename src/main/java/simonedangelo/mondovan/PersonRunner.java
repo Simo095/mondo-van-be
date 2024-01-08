@@ -117,6 +117,13 @@ public class PersonRunner implements CommandLineRunner {
                 listaMarche.add("Mercedes-Benz");
                 listaMarche.add("Volkswagen");
                 listaMarche.add("Fiat");
+                listaMarche.add("Jeep");
+                listaMarche.add("Mercedes-Benz");
+                listaMarche.add("Volkswagen");
+                listaMarche.add("Fiat");
+                listaMarche.add("Jeep");
+                listaMarche.add("Jeep");
+                listaMarche.add("Volkswagen");
 
                 a.setHouseNumber(r.nextInt(1, 100));
                 a.setStreet(f.address().streetAddress(false));
@@ -126,7 +133,7 @@ public class PersonRunner implements CommandLineRunner {
                 c.setName(f.name().firstName());
                 c.setSurname(f.name().lastName());
                 c.setDayOfBirth(LocalDate.of(r.nextInt(1950, 2003), r.nextInt(1, 12), r.nextInt(1, 28)));
-                c.setEmail(c.getName() + "." + c.getSurname() + "@gmail.com");
+                c.setEmail(c.getName().toLowerCase() + "." + c.getSurname().toLowerCase() + "@gmail.com");
                 c.setAvatar("https://api.dicebear.com/7.x/personas/svg");
                 c.setCover("https://ui-avatars.com/api/?name=" + c.getName() + "+" + c.getSurname());
                 c.setPassword(passwordEncoder.encode("1234"));
@@ -259,7 +266,7 @@ public class PersonRunner implements CommandLineRunner {
                 o.setName(f.name().firstName());
                 o.setSurname(f.name().lastName());
                 o.setDayOfBirth(LocalDate.of(r.nextInt(1950, 2003), r.nextInt(1, 12), r.nextInt(1, 28)));
-                o.setEmail(o.getName() + "." + o.getSurname() + "@gmail.com");
+                o.setEmail(o.getName().toLowerCase() + "." + o.getSurname().toLowerCase() + "@gmail.com");
                 o.setAvatar("https://api.dicebear.com/7.x/personas/svg");
                 o.setCover("https://ui-avatars.com/api/?name=" + o.getName() + "+" + o.getSurname());
                 o.setPassword(passwordEncoder.encode("1234"));
@@ -386,25 +393,55 @@ public class PersonRunner implements CommandLineRunner {
 
                 v.setOwner(o);
                 v.setName(f.funnyName().name());
-                v.setBrand(listaMarche.get(r.nextInt(0, 2)));
-                v.setModel(v.getBrand().equals("Volkswagen") ? "T" + r.nextInt(1, 6) : v.getBrand().equals("Fiat") ? "Ducato" : v.getBrand().equals("Mercedes-Benz") ? "Sprinter" : "");
+                v.setBrand(listaMarche.get(i));
+                v.setModel(v.getBrand().equals("Volkswagen") ? "T" + r.nextInt(1, 6) : v.getBrand().equals("Mercedes-Benz") ? "Sprinter" : v.getBrand().equals("Jeep") ? "Renegade" : v.getBrand().equals("Fiat") ? "Ducato" : "Multipla");
                 v.setDisplacement(r.nextInt(1600, 2500));
                 v.setSits(r.nextInt(2, 6));
                 v.setKilometers(r.nextLong(100000, 500000));
                 v.setFirstEnrollment(LocalDate.of(r.nextInt(1950, 2003), r.nextInt(1, 12), r.nextInt(1, 28)));
-                v.setType(v.getBrand().equals("Volkswagen") ? Type.VAN : Type.CAMPER);
+                if (v.getBrand().equals("Volkswagen")) {
+                    v.setType(Type.VAN);
+                    if (i % 2 == 0) {
+                        v.setSupply(Supply.DIESEL);
+                        v.setLicense(License.B);
+                        v.setTransmission(Transmission.MANUAL);
+                    } else {
+                        v.setSupply(Supply.ELECTRIC);
+                        v.setLicense(License.C);
+                        v.setTransmission(Transmission.AUTO);
+                    }
+                } else if (v.getBrand().equals("Mercedes-Benz")) {
+                    v.setType(Type.VAN);
+                    v.setSupply(Supply.HYBRID);
+                    v.setLicense(License.B);
+                    v.setTransmission(Transmission.SEMI_AUTO);
+                } else if (v.getBrand().equals("Jeep")) {
+                    v.setType(Type.CAMPERIZED_JEEP);
+                    v.setSupply(Supply.LPG_DIESEL);
+                    v.setLicense(License.C);
+                    v.setTransmission(Transmission.MANUAL);
+                } else if (v.getBrand().equals("Fiat")) {
+                    if (i % 2 == 0) {
+                        v.setType(Type.CAMPER);
+                        v.setSupply(Supply.DIESEL);
+                        v.setLicense(License.B);
+                        v.setTransmission(Transmission.MANUAL);
+                    } else {
+                        v.setType(Type.ROOFTOOP_CAR);
+                        v.setSupply(Supply.GASOLINE);
+                        v.setLicense(License.B);
+                        v.setTransmission(Transmission.MANUAL);
+                    }
+                }
+
                 v.setHeight(r.nextInt(2, 3));
                 v.setLength(r.nextInt(2, 4));
                 v.setWidth(r.nextInt(1, 2));
-                v.setLicense(License.B);
                 v.setPricePerDay(r.nextInt(80, 200));
-                v.setSupply(Supply.DIESEL);
-                v.setTransmission(Transmission.MANUAL);
                 v.setShortDescriptions(r.nextInt() % 2 == 0 ? "Vacanze in liberta con " + v.getName() : "Comodita garantita, ovunque e comunuque!");
                 List<String> lS = List.of("https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg", "https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg", "https://res.cloudinary.com/dhwybes2b/image/upload/v1702053853/qtx9eypbotnbyc9w84ko.jpg");
                 v.setAvatar(lS);
                 vehiclesRepository.save(v);
-
 
                 for (int j = 0; j < 366; j++) {
                     ServiceStatus s = new ServiceStatus();
@@ -428,6 +465,8 @@ public class PersonRunner implements CommandLineRunner {
                 vA.setAccessoriesDescription(descAcc.get(r.nextInt(0, 4)));
                 vA.setVehicle(v);
                 vehiclesArrangementRepository.save(vA);
+                v.setAnnouncement("Noleggia il mio " + v.getType() + " per la tua prossima vacanza! Questo van è perfetto per tutte le attività che desideri svolgere in vacanza. È spazioso e confortevole, con " + vA.getBads() + " posti letto e " + v.getSits() + " posti a sedere.");
+                vehiclesRepository.save(v);
             }
 
             System.err.println("Finito!");

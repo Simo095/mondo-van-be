@@ -6,10 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Length;
 import org.hibernate.annotations.CreationTimestamp;
+import simonedangelo.mondovan.Comment.Comment;
 import simonedangelo.mondovan.Post.Enum.Category;
 import simonedangelo.mondovan.User.User;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -39,6 +41,8 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "id_author")
     private User author;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
 
 }

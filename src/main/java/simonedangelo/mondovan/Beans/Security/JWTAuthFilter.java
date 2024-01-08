@@ -42,6 +42,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/sign_in/**", request.getServletPath());
+
+        return new AntPathMatcher().match(("/sign_in/**"), request.getServletPath());
     }
 }

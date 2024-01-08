@@ -14,6 +14,7 @@ import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +33,21 @@ public class PostsService {
         p.setText(obj.text());
         p.setTitle(obj.title());
         p.setCategory(obj.category());
+        return postsRepository.save(p);
+    }
+
+    public Post modifyPost(PostsDTO obj, long idPost) throws IOException {
+        Post p = this.getPost(idPost);
+        if (!p.getCategory().equals(obj.category())) {
+            p.setCategory(obj.category());
+        }
+        if (!p.getText().equals(obj.text())) {
+            p.setText((obj.text()));
+        }
+        if (!p.getTitle().equals(obj.title())) {
+            p.setTitle(obj.title());
+        }
+        p.setUpdateAt(new Date());
         return postsRepository.save(p);
     }
 

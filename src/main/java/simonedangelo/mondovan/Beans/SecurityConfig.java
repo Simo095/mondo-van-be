@@ -36,7 +36,6 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
-        http.formLogin(login -> login.disable());
         http.cors(withDefaults());
         http.addFilterBefore(JWTAuthFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(exceptionHandlerFilter, JWTAuthFilter.class);

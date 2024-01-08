@@ -91,7 +91,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -115,11 +115,11 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() <= money).toList();
         if (vehicleFilter.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
@@ -139,7 +139,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -162,11 +162,11 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() <= money).toList();
         if (vehicleFilter.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
@@ -186,7 +186,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -209,11 +209,11 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() <= money).toList();
         if (vehicleFilter.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
@@ -233,7 +233,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -256,11 +256,11 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getPricePerDay(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
-        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() < money).toList();
+        List<VehiclesServicesStatusDTO> vehicleFilter = collectionVehicleAvailable.stream().filter(x -> x.pricePerDay() <= money).toList();
         if (vehicleFilter.isEmpty()) {
             throw new NotFoundEx("Avaiability not found");
         } else {
