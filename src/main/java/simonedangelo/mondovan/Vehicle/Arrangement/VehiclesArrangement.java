@@ -17,7 +17,7 @@ public class VehiclesArrangement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_arrangement", nullable = false)
     private long id;
-    private int bads;
+    private int beds;
     @Column(name = "desc_beds")
     private String descriptionBeds;
     private boolean bathroom;

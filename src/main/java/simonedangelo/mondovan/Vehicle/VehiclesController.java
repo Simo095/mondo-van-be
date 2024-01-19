@@ -14,6 +14,7 @@ import simonedangelo.mondovan.User.Customer.Customer;
 import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.Vehicle.Payload.AnnouncementDTO;
+import simonedangelo.mondovan.Vehicle.Payload.VehiclesCustomerPageDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesDTO;
 
 import java.io.IOException;
@@ -80,12 +81,14 @@ public class VehiclesController {
 
     @GetMapping("/customer_page")
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public Page<Vehicle> vehicleCustomerPageByRegion(@AuthenticationPrincipal Customer user,
-                                                     @RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "16") int size,
-                                                     @RequestParam(defaultValue = "id") String sort) throws Exception {
+    public Page<VehiclesCustomerPageDTO> vehicleCustomerPageByRegion(@AuthenticationPrincipal Customer user,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "16") int size,
+                                                                     @RequestParam(defaultValue = "id") String sort) throws Exception {
         Pageable p = PageRequest.of(page, size, Sort.by(sort));
-        return vehiclesService.getByRegion(user, p);
+        List<VehiclesCustomerPageDTO> vehiclesList = vehiclesService.getByRegion(user, p);
+        return new PageImpl<>(vehiclesList, p, vehiclesList.size());
+
     }
 
 

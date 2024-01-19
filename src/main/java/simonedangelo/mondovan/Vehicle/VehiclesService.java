@@ -20,6 +20,7 @@ import simonedangelo.mondovan.User.Owner.Owner;
 import simonedangelo.mondovan.User.User;
 import simonedangelo.mondovan.User.UsersRepository;
 import simonedangelo.mondovan.Vehicle.Payload.AnnouncementDTO;
+import simonedangelo.mondovan.Vehicle.Payload.VehiclesCustomerPageDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesDTO;
 import simonedangelo.mondovan.Vehicle.Payload.VehiclesServicesStatusDTO;
 
@@ -91,7 +92,8 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -115,7 +117,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -139,7 +141,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -162,7 +164,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -186,7 +188,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -209,7 +211,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -233,7 +235,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -256,7 +258,7 @@ public class VehiclesService {
                                     (serviceStatus.getDate().isBefore(end) && serviceStatus.getDate().isAfter(start))))
                             .map(serviceStatus -> new ServicesStatusDTO(serviceStatus.getId(), serviceStatus.getDate(), serviceStatus.getState()))
                             .collect(Collectors.toList());
-                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBads(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
+                    return new VehiclesServicesStatusDTO(vehicle.getId(), vehicle.getName(), vehicle.getModel(), vehicle.getBrand(), vehicle.getShortDescriptions(), vehicle.getSits(), vehicle.getVehiclesArrangement().getBeds(), vehicle.getPricePerDay(), vehicle.getSupply(), vehicle.getType(), vehicle.getAvatar(), vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName(), listServicesDTO);
                 })
                 .filter(vDTO -> !vDTO.listStatus().stream().anyMatch(servicesStatusDTO -> servicesStatusDTO.state().equals(Status.NOT_AVAILABLE)))
                 .collect(Collectors.toList());
@@ -274,8 +276,11 @@ public class VehiclesService {
         return vehiclesRepository.findAll(p);
     }
 
-    public Page<Vehicle> getByRegion(Customer user, Pageable p) {
-        return vehiclesRepository.findByRegionOwner(user.getAddressesCustomer().getTown().getProvince().getRegion(), p);
+    public List<VehiclesCustomerPageDTO> getByRegion(Customer user, Pageable p) {
+        List<Vehicle> vList = vehiclesRepository.findByRegionOwner(user.getAddressesCustomer().getTown().getProvince().getRegion(), p).stream().toList();
+        return vList.stream().map(vehicle -> new VehiclesCustomerPageDTO(vehicle, vehicle.getOwner().getAddressesOwner().getTown().getProvince().getName())).toList();
+
+        //return vehiclesRepository.findByRegionOwner(user.getAddressesCustomer().getTown().getProvince().getRegion(), p);
     }
 
     public List<Vehicle> vehiclesByProvince(String province) {

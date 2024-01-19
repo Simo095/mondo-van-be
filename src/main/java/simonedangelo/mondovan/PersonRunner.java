@@ -75,6 +75,7 @@ public class PersonRunner implements CommandLineRunner {
             admin.setEmail("admin.admin@vanworld.com");
             admin.setPassword(passwordEncoder.encode("1234"));
             usersRepository.save(admin);
+            
             //ADMIN
             for (int i = 0; i < 10; i++) {
                 Faker f = new Faker(Locale.ITALIAN);
@@ -134,7 +135,7 @@ public class PersonRunner implements CommandLineRunner {
                 c.setSurname(f.name().lastName());
                 c.setDayOfBirth(LocalDate.of(r.nextInt(1950, 2003), r.nextInt(1, 12), r.nextInt(1, 28)));
                 c.setEmail(c.getName().toLowerCase() + "." + c.getSurname().toLowerCase() + "@gmail.com");
-                c.setAvatar("https://api.dicebear.com/7.x/personas/svg");
+                c.setAvatar("https://api.dicebear.com/7.x/personas/svg?seed=" + c.getName());
                 c.setCover("https://ui-avatars.com/api/?name=" + c.getName() + "+" + c.getSurname());
                 c.setPassword(passwordEncoder.encode("1234"));
                 c.setAddressesCustomer(a);
@@ -267,7 +268,7 @@ public class PersonRunner implements CommandLineRunner {
                 o.setSurname(f.name().lastName());
                 o.setDayOfBirth(LocalDate.of(r.nextInt(1950, 2003), r.nextInt(1, 12), r.nextInt(1, 28)));
                 o.setEmail(o.getName().toLowerCase() + "." + o.getSurname().toLowerCase() + "@gmail.com");
-                o.setAvatar("https://api.dicebear.com/7.x/personas/svg");
+                o.setAvatar("https://api.dicebear.com/7.x/personas/svg?seed=" + o.getName());
                 o.setCover("https://ui-avatars.com/api/?name=" + o.getName() + "+" + o.getSurname());
                 o.setPassword(passwordEncoder.encode("1234"));
                 o.setAddressesOwner(b);
@@ -451,7 +452,7 @@ public class PersonRunner implements CommandLineRunner {
                     servicesStatusRepository.save(s);
                 }
 
-                vA.setBads(r.nextInt(2, 6));
+                vA.setBeds(r.nextInt(2, 6));
                 vA.setDescriptionBeds(descCame.get(r.nextInt(0, 4)));
                 vA.setBathroom(r.nextBoolean());
                 vA.setWater(r.nextBoolean());
@@ -465,10 +466,9 @@ public class PersonRunner implements CommandLineRunner {
                 vA.setAccessoriesDescription(descAcc.get(r.nextInt(0, 4)));
                 vA.setVehicle(v);
                 vehiclesArrangementRepository.save(vA);
-                v.setAnnouncement("Noleggia il mio " + v.getType() + " per la tua prossima vacanza! Questo van è perfetto per tutte le attività che desideri svolgere in vacanza. È spazioso e confortevole, con " + vA.getBads() + " posti letto e " + v.getSits() + " posti a sedere.");
+                v.setAnnouncement("Noleggia il mio " + v.getType() + " per la tua prossima vacanza! Questo van è perfetto per tutte le attività che desideri svolgere in vacanza. È spazioso e confortevole, con " + vA.getBeds() + " posti letto e " + v.getSits() + " posti a sedere.");
                 vehiclesRepository.save(v);
             }
-
             System.err.println("Finito!");
         }
     }

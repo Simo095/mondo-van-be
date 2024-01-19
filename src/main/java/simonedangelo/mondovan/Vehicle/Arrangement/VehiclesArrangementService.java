@@ -41,7 +41,7 @@ public class VehiclesArrangementService {
     public Vehicle saveVehiclesArrangement(long idOwner, VehiclesArrangementDTO objArrangement) throws IOException {
         Vehicle v = this.getVehicleByIdOwner(idOwner);
         VehiclesArrangement vA = new VehiclesArrangement();
-        vA.setBads(objArrangement.bads());
+        vA.setBeds(objArrangement.bads());
         vA.setDescriptionBeds(objArrangement.descriptionBeds());
         vA.setBathroom(objArrangement.bathroom());
         vA.setWater(objArrangement.water());
@@ -63,8 +63,8 @@ public class VehiclesArrangementService {
         VehiclesArrangement vA = vehiclesArrangementRepository.findByIdVehicles(v.getId()).orElseThrow(
                 () -> new NotFoundEx("there are no arrangement")
         );
-        if (vA.getBads() != objArrangement.bads()) {
-            vA.setBads(objArrangement.bads());
+        if (vA.getBeds() != objArrangement.bads()) {
+            vA.setBeds(objArrangement.bads());
         }
         if (!vA.getDescriptionBeds().equals(objArrangement.descriptionBeds())) {
             vA.setDescriptionBeds(objArrangement.descriptionBeds());

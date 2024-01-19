@@ -22,16 +22,16 @@ public interface VehiclesRepository extends JpaRepository<Vehicle, Long> {
     @Query("SELECT v,s.date FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date=CURRENT_DATE() ORDER BY s.date")
     Optional<List<Vehicle>> findByAvailability();
 
-    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.bads=:beds AND v.owner.addressesOwner.town.province.abbreviation=:province")
+    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.beds=:beds AND v.owner.addressesOwner.town.province.abbreviation=:province AND v.vehiclesArrangement != NULL")
     List<Vehicle> findByRangeDateProvinceAndBeds(LocalDate start, LocalDate end, int beds, String province);
 
-    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.bads=:beds")
+    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement.beds=:beds AND v.vehiclesArrangement != NULL")
     List<Vehicle> findByRangeDateAndBeds(LocalDate start, LocalDate end, int beds);
 
-    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.owner.addressesOwner.town.province.abbreviation=:province ")
+    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.owner.addressesOwner.town.province.abbreviation=:province AND v.vehiclesArrangement != NULL ")
     List<Vehicle> findByRangeDateAndProvince(LocalDate start, LocalDate end, String province);
 
-    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end")
+    @Query("SELECT v FROM Vehicle v JOIN v.servicesStatus s WHERE s.state='AVAILABLE' AND s.date BETWEEN:start AND :end AND v.vehiclesArrangement != NULL")
     List<Vehicle> findByRangeDateOnly(LocalDate start, LocalDate end);
 
 }
